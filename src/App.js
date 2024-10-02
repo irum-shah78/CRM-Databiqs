@@ -1,24 +1,36 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from './components/header/Header';
+import JobCalculator from './pages/jobcalculator/JobCalculator';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Sidebar from './components/sidebar/Sidebar.jsx';
+import Dashboard from './pages/dashboard/Dashboard.jsx';
+import LeadManagment from './components/leadmanagment/LeadManagment.jsx';
+import DealManagment from './components/dealmanagment/DealManagment.jsx';
+import LeadDetails from './components/leaddetails/LeadDetails.jsx';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Router>
+        <Header />
+        <div className="flex">
+          <div className="w-72">
+            <Sidebar />
+          </div>
+
+          <div className="flex-1 xl:p-4 lg:p-4 p-0 ">
+            <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" />} />
+              <Route path="/dashboard" element={<Dashboard/>} />
+              <Route path="/jobcalculator" element={<JobCalculator />} />
+              <Route path="/leadmanagement" element={<LeadManagment />} />
+              <Route path="/dealmanagement" element={<DealManagment />} />
+              <Route path="/lead/:id" element={<LeadDetails />} />
+            </Routes>
+          </div>
+        </div>
+      </Router>
+    </>
   );
 }
 
