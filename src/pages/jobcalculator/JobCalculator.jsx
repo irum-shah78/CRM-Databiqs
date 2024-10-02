@@ -9,9 +9,9 @@ import editIcon from "../../assets/edit-icon.svg";
 
 const JobCalculator = () => {
   const fileInputRef = useRef(null);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editData, setEditData] = useState(null);
+  const [newFields, setNewFields] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [newFieldLabel, setNewFieldLabel] = useState('');
 
   const handleUploadClick = () => {
     fileInputRef.current.click();
@@ -22,21 +22,6 @@ const JobCalculator = () => {
     if (selectedFile) {
       console.log('File selected:', selectedFile.name);
     }
-  };
-
-  const handleEditClick = (rowData) => {
-    setEditData(rowData);
-    setIsModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    setEditData(null);
-  };
-
-  const handleSaveChanges = () => {
-    console.log("Saving changes:", editData);
-    setIsModalOpen(false);
   };
 
   const [isEditing, setIsEditing] = useState(false);
@@ -65,9 +50,73 @@ const JobCalculator = () => {
     setIsEditing(false);
   };
 
+  const [data, setData] = useState(
+    [...Array(24)].map(() => ({
+      id: '01',
+      room: '001',
+      width: '001',
+      height: '001',
+      type: '',
+      panel: 'OX',
+      quantity: '001',
+      price: '180',
+      additionalLabor: '-----',
+      notes: 'notes',
+      totalLabor: '001',
+    }))
+  );
+
+  const [editingCell, setEditingCell] = useState({ row: null, column: null });
+
+  const headers = ['Id', 'Room', 'Width', 'Height', 'Type', 'Panel', 'Quantity', 'Price', 'Additional Labor', 'Notes', 'Total Labor'];
+
+  const typeOptions = [
+    ' ',
+    'ES-EL100 - Single Hung',
+    'ES-EL200 - HORIZONTAL ROLLER',
+    'ES-EL200 - HORIZONTAL ROLLER XOX',
+    'ES-EL400 - SLIDING GLASS DOOR',
+    'ES-EL300 - SWING DOOR - SINGLE LEAF',
+    'ES-EL300 - SWING DOOR - DOUBLE LEAF',
+    'ES-EL150 SHAPE - FIXED WINDOW',
+    'MULLION',
+    'ES-EL300 - SWING DOOR - SINGLE LEAF with Side Lite',
+    'ES-EL300 - SWING DOOR - DOUBLE LEAF with side Lite',
+    'ES-EL300 - SWING DOOR - DOUBLE LEAF with 2 Side Lites',
+  ];
+
+  const handleCellClick = (rowIdx, column) => {
+    if (column !== 'id') {
+      setEditingCell({ row: rowIdx, column });
+    }
+  };
+
+  const handleInputChange = (e, rowIdx, column) => {
+    const updatedData = [...data];
+    updatedData[rowIdx][column] = e.target.value;
+    setData(updatedData);
+  };
+
+  const handleBlur = () => {
+    setEditingCell({ row: null, column: null });
+  };
+
+
+  const handleAddField = () => {
+    setShowModal(true);
+  };
+
+  const handleConfirmAddField = () => {
+    if (newFieldLabel) {
+      setNewFields((prevFields) => [...prevFields, { label: newFieldLabel, value: '' }]);
+      setNewFieldLabel('');
+    }
+    setShowModal(false);
+  };
+
   return (
     <div className="flex min-h-screen xl:w-full lg:w-[700px] md:w-[460px] w-80 p-0 lg:mt-0 mt-4">
-      <div className="flex-1 p-6 bg-gray-50 overflow-auto">
+      <div className="flex-1 p-6 bg-gray-50 overflow-auto pt-0">
         <div className="flex lg:flex-row flex-col justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Job Calculator</h1>
           <div className="flex items-center justify-center space-x-4 h-[50px] mt-4 md:mt-0">
@@ -131,13 +180,13 @@ const JobCalculator = () => {
             </div>
           </div>
 
-          <div className='bg-white shadow-md rounded-lg p-4'>
+          <div className="bg-white overflow-x-auto shadow-md rounded-lg p-4">
             <div className="bg-white overflow-hidden w-full h-full">
               <div className="max-h-[500px] overflow-y-auto w-full">
-                <table className="min-w-full table-auto divide-y divide-gray-200">
+                <table className="min-w-full table-auto divide-y divide-gray-200 text-center">
                   <thead className="bg-[#F4F7F9] rounded-xl">
                     <tr>
-                      {['Id', 'Room', 'Width', 'Height', 'Type', 'Panel', 'Quantity', 'Price', 'Additional Labor', 'Total Labor', 'Edit'].map((header) => (
+                      {headers.map((header) => (
                         <th key={header} className="py-2 px-4 text-center text-sm font-medium tracking-wider">
                           {header}
                         </th>
@@ -145,40 +194,36 @@ const JobCalculator = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {[...Array(1)].map((_, idx) => (
-                      <tr key={idx} className={idx % 2 !== 0 ? 'bg-gray-100' : ''}>
-                        <td className="px-3 py-4 whitespace-nowrap">01</td>
-                        <td className="px-3 py-4 whitespace-nowrap">001</td>
-                        <td className="px-3 py-4 whitespace-nowrap">001</td>
-                        <td className="px-3 py-4 whitespace-nowrap">001</td>
-                        <td className="px-3 py-4 whitespace-nowrap w-80">
-                          <select className="form-select px-4 py-2 rounded-md w-80 border border-gray-300">
-                            <option value="single-hung">ES-EL100 - Single Hung</option>
-                            <option value="horizontal-roller">ES-EL200 - HORIZONTAL ROLLER</option>
-                            <option value="horizontal-roller-xox">ES-EL200 - HORIZONTAL ROLLER XOX</option>
-                            <option value="sliding-glass-door">ES-EL400 - SLIDING GLASS DOOR</option>
-                            <option value="swing-door-single">ES-EL300 - SWING DOOR - SINGLE LEAF</option>
-                            <option value="swing-door-double">ES-EL300 - SWING DOOR - DOUBLE LEAF</option>
-                            <option value="fixed-window">ES-EL150 SHAPE - FIXED WINDOW</option>
-                            <option value="mullion">MULLION</option>
-                            <option value="swing-door-side-lite">ES-EL300 - SWING DOOR - SINGLE LEAF with Side Lite</option>
-                            <option value="swing-door-double-side-lite">ES-EL300 - SWING DOOR - DOUBLE LEAF with side Lite</option>
-                            <option value="swing-door-double-2-side-lites">ES-EL300 - SWING DOOR - DOUBLE LEAF with 2 Side Lites</option>
-                          </select>
-                        </td>
-                        <td className="px-3 py-4 whitespace-nowrap">OX</td>
-                        <td className="px-3 py-4 whitespace-nowrap">001</td>
-                        <td className="px-3 py-4 whitespace-nowrap">180</td>
-                        <td className="px-3 py-4 whitespace-nowrap">-----</td>
-                        <td className="px-3 py-4 whitespace-nowrap">001</td>
-                        <td className="px-3 py-4 whitespace-nowrap text-center">
-                          <img
-                            src={editIcon}
-                            alt="Edit Icon"
-                            className="cursor-pointer"
-                            onClick={() => handleEditClick({ id: idx, room: '001', width: '001', height: '001', type: 'Single Hung' })}
-                          />
-                        </td>
+                    {data.map((row, rowIdx) => (
+                      <tr key={rowIdx} className={rowIdx % 2 !== 0 ? 'bg-gray-100' : ''}>
+                        {Object.keys(row).map((column, colIdx) => (
+                          <td key={colIdx} className="px-3 py-4 whitespace-nowrap" onClick={() => handleCellClick(rowIdx, column)}>
+                            {column === 'type' ? (
+                              <select
+                                value={row[column]}
+                                onChange={(e) => handleInputChange(e, rowIdx, column)}
+                                className="form-select px-4 py-2 rounded-md w-64 border border-gray-300"
+                              >
+                                {typeOptions.map((option, idx) => (
+                                  <option key={idx} value={option}>
+                                    {option}
+                                  </option>
+                                ))}
+                              </select>
+                            ) : editingCell.row === rowIdx && editingCell.column === column ? (
+                              <input
+                                type="text"
+                                value={row[column]}
+                                onChange={(e) => handleInputChange(e, rowIdx, column)}
+                                onBlur={handleBlur}
+                                autoFocus
+                                className="px-2 py-1 w-16 border border-gray-300 rounded"
+                              />
+                            ) : (
+                              row[column]
+                            )}
+                          </td>
+                        ))}
                       </tr>
                     ))}
                   </tbody>
@@ -186,87 +231,59 @@ const JobCalculator = () => {
               </div>
             </div>
           </div>
-
-          {isModalOpen && (
-            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-              <div className="bg-white rounded-lg p-6 lg:w-1/2 w-2/3">
-                <h2 className="text-xl font-bold mb-4">Edit Job Entry</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  {['Room', 'Width', 'Height', 'Type', 'Panel', 'Quantity', 'Price', 'Additional Labor', 'Total Labor'].map((label) => (
-                    <div key={label} className="flex flex-col">
-                      <label className="text-sm text-gray-700 capitalize font-semibold">{label}</label>
-                      {label === 'Type' ? (
-                        <select
-                          value={editData ? editData[label.toLowerCase()] : ''}
-                          onChange={(e) => setEditData({ ...editData, [label.toLowerCase()]: e.target.value })}
-                          className="border border-gray-300 rounded-lg py-2 px-4 mt-1"
-                        >
-                          <option value="single-hung">ES-EL100 - Single Hung</option>
-                          <option value="horizontal-roller">ES-EL200 - Horizontal Roller</option>
-                          <option value="horizontal-roller-xox">ES-EL200 - Horizontal Roller XOX</option>
-                          <option value="sliding-glass-door">ES-EL400 - Sliding Glass Door</option>
-                          <option value="swing-door-single">ES-EL300 - Swing Door - Single Leaf</option>
-                          <option value="swing-door-double">ES-EL300 - Swing Door - Double Leaf</option>
-                          <option value="fixed-window">ES-EL150 Shape - Fixed Window</option>
-                          <option value="mullion">Mullion</option>
-                          <option value="swing-door-side-lite">ES-EL300 - Swing Door - Single Leaf with Side Lite</option>
-                          <option value="swing-door-double-side-lite">ES-EL300 - Swing Door - Double Leaf with Side Lite</option>
-                          <option value="swing-door-double-2-side-lites">ES-EL300 - Swing Door - Double Leaf with 2 Side Lites</option>
-                        </select>
-                      ) : (
-                        <input
-                          type="text"
-                          value={editData ? editData[label.toLowerCase()] : ''}
-                          onChange={(e) => setEditData({ ...editData, [label.toLowerCase()]: e.target.value })}
-                          className="border border-gray-300 rounded-lg py-2 px-4 mt-1"
-                        />
-                      )}
-                    </div>
-                  ))}
-                </div>
-                <div className="flex justify-end mt-4">
-                  <button
-                    className="border border-[#747474] text-[#747474] px-4 py-2 rounded-lg mr-2"
-                    onClick={handleModalClose}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="bg-[#7234D7] text-white px-4 py-2 rounded-lg"
-                    onClick={handleSaveChanges}
-                  >
-                    Save Changes
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         <div>
-          <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 mt-3">
-            {['municipality', 'contractTotal', 'engineeringCost', 'commissionableAmount', 'permit',
-              'laborCost', 'creditCardFees', 'materialAmount', 'shutterCost', 'materialTax',
-              'caulkingScrews', 'commissionPercentage', 'scaffold', 'commissionAmount', 'miscellaneous',
-              'profitPercentage', 'water', 'jobProfit'].map((label, idx) => (
-                <div key={idx} className="flex flex-col">
-                  <label className="text-sm text-gray-700 capitalize font-semibold">{label}</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      placeholder="Enter value"
-                      value={formData[label.toLowerCase()]}
-                      onChange={(e) => setFormData({ ...formData, [label.toLowerCase()]: e.target.value })}
-                      className="border border-gray-300 rounded-lg py-2 px-4 mt-1"
-                    />
-                  ) : (
-                    <span className="py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">{formData[label.toLowerCase()] || 'Enter Value'}</span>
-                  )}
-                </div>
-              ))}
+          <div className="grid xl:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-2 mt-3 p-4 ">
+            {[
+              'Municipality', 'Contract Total', 'Engineering Cost', 'Commissionable Amount', 'Permit',
+              'Labor Cost', 'Credit Card Fees', 'Material Amount', 'Shutter Cost', 'Material Tax',
+              'Caulking Screws', 'Commission Percentage', 'Scaffold', 'Commission Amount', 'Miscellaneous',
+              'Profit Percentage', 'Water', 'Job Profit'
+            ].map((label, idx) => (
+              <div key={idx} className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2">
+                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{label}</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    placeholder="Enter value"
+                    value={formData[label.toLowerCase()]}
+                    onChange={(e) => setFormData({ ...formData, [label.toLowerCase()]: e.target.value })}
+                    className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                  />
+                ) : (
+                  <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                    {formData[label.toLowerCase()] || 'Enter Value'}
+                  </span>
+                )}
+              </div>
+            ))}
+
+            {newFields.map((field, idx) => (
+              <div key={idx + 100} className="flex items-center gap-2">
+                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{field.label}</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    placeholder="Enter value"
+                    value={field.value}
+                    onChange={(e) => {
+                      const updatedFields = [...newFields];
+                      updatedFields[idx].value = e.target.value;
+                      setNewFields(updatedFields);
+                    }}
+                    className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                  />
+                ) : (
+                  <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                    {field.value || 'Enter Value'}
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
 
-          <div className='flex items-center gap-4 mt-5'>
+          <div className="flex items-center gap-4 mt-5">
             {isEditing ? (
               <>
                 <button
@@ -275,15 +292,53 @@ const JobCalculator = () => {
                 >
                   Save Changes
                 </button>
+                <button
+                  className="bg-gray-400 text-white px-4 py-2 rounded"
+                  onClick={handleAddField}
+                >
+                  Add Field
+                </button>
               </>
             ) : (
-              <button className='flex items-center gap-2 border border-gray-400 rounded px-5 py-2' onClick={() => setIsEditing(true)}>
-                <img src={editIcon} alt='edit icon' /> <span className='text-[#7234D7]'>Edit</span>
+              <button
+                className="flex items-center gap-2 border border-gray-400 rounded px-5 py-2"
+                onClick={() => setIsEditing(true)}
+              >
+                <img src={editIcon} alt="edit icon" />
+                <span className="text-[#7234D7]">Edit</span>
               </button>
             )}
           </div>
-        </div>
 
+          {showModal && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
+              <div className="bg-white p-6 rounded shadow-lg">
+                <h3 className="text-lg font-semibold mb-3">Add New Field</h3>
+                <input
+                  type="text"
+                  placeholder="Enter field name"
+                  value={newFieldLabel}
+                  onChange={(e) => setNewFieldLabel(e.target.value)}
+                  className="border border-gray-300 rounded-lg py-2 px-4 mb-4 w-full"
+                />
+                <div className="flex justify-end gap-4">
+                  <button
+                    className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="bg-[#7234D7] text-white px-4 py-2 rounded"
+                    onClick={handleConfirmAddField}
+                  >
+                    Add Field
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
