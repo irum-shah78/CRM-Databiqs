@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import searchIcon from "../../assets/search.svg";
 import listView from "../../assets/listView.svg";
 import kanbanView from "../../assets/kanbanView.svg";
@@ -7,6 +8,11 @@ import filterDropdown from "../../assets/filter-dropdown.svg";
 import calender from "../../assets/calender.svg";
 
 const DealManagment = () => {
+  const navigate = useNavigate();
+  const handleJobCalcClick = () => {
+    navigate('/jobcalcdetails');
+  };
+
   return (
     <div className="flex min-h-screen xl:w-full lg:w-[700px] md:w-[460px] w-80 lg:p-0 lg:mt-0 mt-4">
       <div className="flex-1 p-6 bg-gray-50 overflow-auto pt-0">
@@ -88,7 +94,12 @@ const DealManagment = () => {
                       <td className="px-6 py-4 text-center">Australia</td>
                       <td className="px-6 py-4 text-center">Lorem..</td>
                       <td className="px-6 py-4 text-center">
-                        <button className='px-3 py-2 bg-[#7234D7] text-white rounded-md'>Job Calc</button>
+                        <button
+                          className='px-3 py-2 bg-[#7234D7] text-white rounded-md'
+                          onClick={handleJobCalcClick}
+                        >
+                          Job Calc
+                        </button>
                       </td>
                     </tr>
                   ))}

@@ -24,7 +24,17 @@ const Sidebar = () => {
     { name: "Deal Management", icon: dealManagementIcon, link: "/dealmanagement" },
     { name: "Job Calculator", icon: jobSubmissionIcon, link: "/jobcalculator" },
     { name: "Appointments & Calendar", icon: appointmentsIcon, link: "/appointments-calendar" },
-    { name: "Tasks & Follow-ups", icon: tasksIcon, link: "/tasks-followups" },
+    // { name: "Tasks & Follow-ups", icon: tasksIcon, link: "/tasks" },
+    {
+      name: "Tasks & Follow-ups", icon: tasksIcon, link: "/tasks",
+      subItems: [
+        { name: "All Tasks", link: "/tasks" },
+        { name: "Projects Tasks", link: "/tasks-followups/projects" },
+        { name: "Call Backs", link: "/tasks-followups/callbacks" },
+        { name: "General Tasks", link: "/tasks-followups/general" },
+        { name: "Service", link: "/tasks-followups/service" }
+      ]
+    },
     { name: "Commissions", icon: commissionsIcon, link: "/commissions" },
     { name: "Jobs", icon: jobSubmissionIcon, link: "/jobs" },
     { name: "Project Management", icon: projectManagementIcon, link: "/project-management" },

@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
+import axios from 'axios';
 import searchIcon from "../../assets/search.svg";
 import listView from "../../assets/listView.svg";
 import kanbanView from "../../assets/kanbanView.svg";
@@ -6,25 +7,86 @@ import filter from "../../assets/filter.svg";
 import filterDropdown from "../../assets/filter-dropdown.svg";
 import calender from "../../assets/calender.svg";
 import editIcon from "../../assets/edit-icon.svg";
+import Loader from '../../components/loader/Loader';
 
 const JobCalculator = () => {
-  const fileInputRef = useRef(null);
   const [newFields, setNewFields] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [newFieldLabel, setNewFieldLabel] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const fileInputRef = useRef(null);
+  const [editingCell, setEditingCell] = useState({ row: null, column: null });
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(
+    [...Array(24)].map((_, idx) => ({
+      id: String(idx + 1).padStart(2, '0'),
+      room: '001',
+      width: '001',
+      height: '001',
+      type: '',
+      panel: 'OX',
+      quantity: '001',
+      price: '180',
+      additionalLabor: '-----',
+      notes: 'notes',
+      totalLabor: '001',
+    }))
+  );
+
+  const headers = ['Id', 'Room', 'Width', 'Height', 'Type', 'Panel', 'Quantity', 'Price', 'Additional Labor', 'Notes', 'Total Labor'];
+
+  const typeOptions = [
+    ' ',
+    'ES-EL100 - Single Hung',
+    'ES-EL200 - HORIZONTAL ROLLER',
+    'ES-EL200 - HORIZONTAL ROLLER XOX',
+    'ES-EL400 - SLIDING GLASS DOOR',
+    'ES-EL300 - SWING DOOR - SINGLE LEAF',
+    'ES-EL300 - SWING DOOR - DOUBLE LEAF',
+    'ES-EL150 SHAPE - FIXED WINDOW',
+    'MULLION',
+    'ES-EL300 - SWING DOOR - SINGLE LEAF with Side Lite',
+    'ES-EL300 - SWING DOOR - DOUBLE LEAF with side Lite',
+    'ES-EL300 - SWING DOOR - DOUBLE LEAF with 2 Side Lites',
+  ];
 
   const handleUploadClick = () => {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
-      console.log('File selected:', selectedFile.name);
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      setLoading(true);
+      try {
+        const response = await axios.post('https://job-calculator-dan-01-hwa8c4czf7c6h5ec.westus-01.azurewebsites.net/uploadfile/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        const extractedData = response.data;
+        console.log('Extracted Data:', extractedData);
+        if (extractedData) {
+          const updatedData = extractedData.map((item, idx) => ({
+            id: String(idx + 1).padStart(2, '0'),
+            ...item,
+            notes: item.notes || '0',
+            totalLabor: item.totalLabor || '0',
+          }));
+          setData(updatedData);
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     municipality: '',
     contractTotal: '',
@@ -50,41 +112,6 @@ const JobCalculator = () => {
     setIsEditing(false);
   };
 
-  const [data, setData] = useState(
-    [...Array(24)].map(() => ({
-      id: '01',
-      room: '001',
-      width: '001',
-      height: '001',
-      type: '',
-      panel: 'OX',
-      quantity: '001',
-      price: '180',
-      additionalLabor: '-----',
-      notes: 'notes',
-      totalLabor: '001',
-    }))
-  );
-
-  const [editingCell, setEditingCell] = useState({ row: null, column: null });
-
-  const headers = ['Id', 'Room', 'Width', 'Height', 'Type', 'Panel', 'Quantity', 'Price', 'Additional Labor', 'Notes', 'Total Labor'];
-
-  const typeOptions = [
-    ' ',
-    'ES-EL100 - Single Hung',
-    'ES-EL200 - HORIZONTAL ROLLER',
-    'ES-EL200 - HORIZONTAL ROLLER XOX',
-    'ES-EL400 - SLIDING GLASS DOOR',
-    'ES-EL300 - SWING DOOR - SINGLE LEAF',
-    'ES-EL300 - SWING DOOR - DOUBLE LEAF',
-    'ES-EL150 SHAPE - FIXED WINDOW',
-    'MULLION',
-    'ES-EL300 - SWING DOOR - SINGLE LEAF with Side Lite',
-    'ES-EL300 - SWING DOOR - DOUBLE LEAF with side Lite',
-    'ES-EL300 - SWING DOOR - DOUBLE LEAF with 2 Side Lites',
-  ];
-
   const handleCellClick = (rowIdx, column) => {
     if (column !== 'id') {
       setEditingCell({ row: rowIdx, column });
@@ -100,7 +127,6 @@ const JobCalculator = () => {
   const handleBlur = () => {
     setEditingCell({ row: null, column: null });
   };
-
 
   const handleAddField = () => {
     setShowModal(true);
@@ -180,57 +206,93 @@ const JobCalculator = () => {
             </div>
           </div>
 
-          <div className="bg-white overflow-x-auto shadow-md rounded-lg p-4">
-            <div className="bg-white overflow-hidden w-full h-full">
-              <div className="max-h-[500px] overflow-y-auto w-full">
-                <table className="min-w-full table-auto divide-y divide-gray-200 text-center">
-                  <thead className="bg-[#F4F7F9] rounded-xl">
-                    <tr>
-                      {headers.map((header) => (
-                        <th key={header} className="py-2 px-4 text-center text-sm font-medium tracking-wider">
-                          {header}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {data.map((row, rowIdx) => (
-                      <tr key={rowIdx} className={rowIdx % 2 !== 0 ? 'bg-gray-100' : ''}>
-                        {Object.keys(row).map((column, colIdx) => (
-                          <td key={colIdx} className="px-3 py-4 whitespace-nowrap" onClick={() => handleCellClick(rowIdx, column)}>
-                            {column === 'type' ? (
-                              <select
-                                value={row[column]}
-                                onChange={(e) => handleInputChange(e, rowIdx, column)}
-                                className="form-select px-4 py-2 rounded-md w-64 border border-gray-300"
-                              >
-                                {typeOptions.map((option, idx) => (
-                                  <option key={idx} value={option}>
-                                    {option}
-                                  </option>
-                                ))}
-                              </select>
-                            ) : editingCell.row === rowIdx && editingCell.column === column ? (
-                              <input
-                                type="text"
-                                value={row[column]}
-                                onChange={(e) => handleInputChange(e, rowIdx, column)}
-                                onBlur={handleBlur}
-                                autoFocus
-                                className="px-2 py-1 w-16 border border-gray-300 rounded"
-                              />
-                            ) : (
-                              row[column]
-                            )}
-                          </td>
+          {loading ? (
+            <Loader />
+          ) : (
+            <div className="bg-white overflow-x-auto shadow-md rounded-lg p-4">
+              <div className="bg-white overflow-hidden w-full h-full">
+                <div className="max-h-[500px] overflow-y-auto w-full">
+                  <table className="min-w-full table-auto divide-y divide-gray-200 text-center">
+                    <thead className="bg-[#F4F7F9] rounded-xl">
+                      <tr>
+                        {headers.map((header) => (
+                          <th key={header} className="py-2 px-4 text-center text-sm font-medium tracking-wider">
+                            {header}
+                          </th>
                         ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {data.map((row, rowIdx) => (
+                        <tr key={rowIdx} className={rowIdx % 2 !== 0 ? 'bg-gray-100' : ''}>
+                          {Object.keys(row).map((column, colIdx) => (
+                            // <td key={colIdx} className="px-3 py-4 whitespace-nowrap" onClick={() => handleCellClick(rowIdx, column)}>
+                            //   {column === 'type' ? (
+                            //     <select
+                            //       value={row[column]}
+                            //       onChange={(e) => handleInputChange(e, rowIdx, column)}
+                            //       className="form-select px-4 py-2 rounded-md w-64 border border-gray-300"
+                            //     >
+                            //       {typeOptions.map((option, idx) => (
+                            //         <option key={idx} value={option}>
+                            //           {option}
+                            //         </option>
+                            //       ))}
+                            //     </select>
+                            //   ) : column === 'id' ? (
+                            //     <span>{row[column]}</span>
+                            //   ) : editingCell.row === rowIdx && editingCell.column === column ? (
+                            //     <input
+                            //       type="text"
+                            //       value={row[column]}
+                            //       onChange={(e) => handleInputChange(e, rowIdx, column)}
+                            //       onBlur={handleBlur}
+                            //       autoFocus
+                            //       className="px-2 py-1 w-16 border border-gray-300 rounded"
+                            //     />
+                            //   ) : (
+                            //     (row[column] === '' ? '0' : row[column])
+                            //   )}
+                            // </td>
+
+                            <td key={colIdx} className="px-3 py-4 whitespace-nowrap" onClick={() => handleCellClick(rowIdx, column)}>
+                              {column === 'type' ? (
+                                <select
+                                  value={typeOptions.includes(row[column]) ? row[column] : ' '}  // Check if the value exists in typeOptions, otherwise set to default empty option
+                                  onChange={(e) => handleInputChange(e, rowIdx, column)}
+                                  className="form-select px-4 py-2 rounded-md w-64 border border-gray-300"
+                                >
+                                  {typeOptions.map((option, idx) => (
+                                    <option key={idx} value={option}>
+                                      {option}
+                                    </option>
+                                  ))}
+                                </select>
+                              ) : column === 'id' ? (
+                                <span>{row[column]}</span>
+                              ) : editingCell.row === rowIdx && editingCell.column === column ? (
+                                <input
+                                  type="text"
+                                  value={row[column]}
+                                  onChange={(e) => handleInputChange(e, rowIdx, column)}
+                                  onBlur={handleBlur}
+                                  autoFocus
+                                  className="px-2 py-1 w-16 border border-gray-300 rounded"
+                                />
+                              ) : (
+                                (row[column] === '' ? '0' : row[column])
+                              )}
+                            </td>
+
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         <div>
