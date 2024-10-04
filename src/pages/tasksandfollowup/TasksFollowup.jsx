@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import searchIcon from "../../assets/search.svg";
 import listView from "../../assets/listView.svg";
 import kanbanView from "../../assets/kanbanView.svg";
 import filter from "../../assets/filter.svg";
 import filterDropdown from "../../assets/filter-dropdown.svg";
 import calender from "../../assets/calender.svg";
+import filterInactive from "../../assets/white-filter.svg";
 
 const Tasks = () => {
   const [activeButton, setActiveButton] = useState();
@@ -17,6 +19,11 @@ const Tasks = () => {
     } else {
       setShowDropdown(false);
     }
+  };
+
+  const navigate = useNavigate();
+  const handleJobCalcClick = () => {
+    navigate('/addtask');
   };
 
   return (
@@ -37,7 +44,7 @@ const Tasks = () => {
                 className="border border-gray-300 rounded-lg py-2 pl-10 pr-4 w-full"
               />
             </div>
-            <button className="bg-[#7234D7] text-white xl:px-4 xl:py-2 px-2 py-1 rounded-md xl:text-base text-sm">
+            <button className="bg-[#7234D7] text-white xl:px-4 xl:py-2 px-2 py-1 rounded-md xl:text-base text-sm" onClick={handleJobCalcClick}>
               Add Task
             </button>
           </div>
@@ -58,31 +65,28 @@ const Tasks = () => {
             </div>
             <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
               <button
-                className={`${
-                  activeButton === 'ListView' ? 'bg-[#7234D7] text-white' : 'border border-[#B3B3B3]'
-                } xl:px-4 xl:py-2 px-2 py-1 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm`}
+                className={`${activeButton === 'ListView' ? 'bg-[#7234D7] text-white' : 'border border-[#B3B3B3]'
+                  } xl:px-4 xl:py-2 px-2 py-1 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm`}
                 onClick={() => handleButtonClick('ListView')}
               >
-                <img src={listView} alt="listView" />
+                <img src={activeButton === 'ListView' ? listView : kanbanView} alt="listView" />
                 List View
               </button>
               <button
-                className={`${
-                  activeButton === 'KanbanView' ? 'bg-[#7234D7] text-white' : 'border border-[#B3B3B3]'
-                } xl:px-4 xl:py-2 px-2 py-1 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm`}
+                className={`${activeButton === 'KanbanView' ? 'bg-[#7234D7] text-white' : 'border border-[#B3B3B3]'
+                  } xl:px-4 xl:py-2 px-2 py-1 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm`}
                 onClick={() => handleButtonClick('KanbanView')}
               >
-                <img src={kanbanView} alt="kanbanView" />
+                <img src={activeButton === 'KanbanView' ? filterInactive : kanbanView} alt="kanbanView" />
                 Kanban View
               </button>
               <div className="relative">
                 <button
-                  className={`${
-                    activeButton === 'Filter' ? 'bg-[#7234D7] text-white' : 'border border-[#B3B3B3]'
-                  } xl:px-4 xl:py-2 px-2 py-1 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm`}
+                  className={`${activeButton === 'Filter' ? 'bg-[#7234D7] text-white' : 'border border-[#B3B3B3]'
+                    } xl:px-4 xl:py-2 md:py-4 px-2 py-4 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm`}
                   onClick={() => handleButtonClick('Filter')}
                 >
-                  <img src={filter} alt="filter" />
+                  <img src={activeButton === 'Filter' ? filterInactive : filter} alt="filter" />
                   Filter
                 </button>
 

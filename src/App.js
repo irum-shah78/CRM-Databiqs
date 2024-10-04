@@ -9,6 +9,8 @@ import DealManagment from './components/dealmanagment/DealManagment.jsx';
 import LeadDetails from './components/leaddetails/LeadDetails.jsx';
 import JobCalculatorDetails from './components/jobcalculatordetails/JobCalculatorDetails.jsx';
 import Tasks from './pages/tasksandfollowup/TasksFollowup.jsx';
+import AddTask from './components/addtask/AddTask.jsx';
+import Permit from './pages/permithoaprop/PermitHoa.jsx';
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
               <Route path="/lead/:id" element={<LeadDetails />} />
               <Route path="/jobcalcdetails" element={<JobCalculatorDetails />} />
               <Route path="/tasks" element={<Tasks />} />
+              <Route path="/addtask" element={<AddTask />} />
+              <Route path="/permit-hoa" element={<Permit />} />
             </Routes>
           </div>
         </div>

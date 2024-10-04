@@ -226,45 +226,16 @@ const JobCalculator = () => {
                       {data.map((row, rowIdx) => (
                         <tr key={rowIdx} className={rowIdx % 2 !== 0 ? 'bg-gray-100' : ''}>
                           {Object.keys(row).map((column, colIdx) => (
-                            // <td key={colIdx} className="px-3 py-4 whitespace-nowrap" onClick={() => handleCellClick(rowIdx, column)}>
-                            //   {column === 'type' ? (
-                            //     <select
-                            //       value={row[column]}
-                            //       onChange={(e) => handleInputChange(e, rowIdx, column)}
-                            //       className="form-select px-4 py-2 rounded-md w-64 border border-gray-300"
-                            //     >
-                            //       {typeOptions.map((option, idx) => (
-                            //         <option key={idx} value={option}>
-                            //           {option}
-                            //         </option>
-                            //       ))}
-                            //     </select>
-                            //   ) : column === 'id' ? (
-                            //     <span>{row[column]}</span>
-                            //   ) : editingCell.row === rowIdx && editingCell.column === column ? (
-                            //     <input
-                            //       type="text"
-                            //       value={row[column]}
-                            //       onChange={(e) => handleInputChange(e, rowIdx, column)}
-                            //       onBlur={handleBlur}
-                            //       autoFocus
-                            //       className="px-2 py-1 w-16 border border-gray-300 rounded"
-                            //     />
-                            //   ) : (
-                            //     (row[column] === '' ? '0' : row[column])
-                            //   )}
-                            // </td>
-
                             <td key={colIdx} className="px-3 py-4 whitespace-nowrap" onClick={() => handleCellClick(rowIdx, column)}>
                               {column === 'type' ? (
                                 <select
-                                  value={typeOptions.includes(row[column]) ? row[column] : ' '}  // Check if the value exists in typeOptions, otherwise set to default empty option
+                                  value={typeOptions.includes(row[column]) ? row[column] : ' '}
                                   onChange={(e) => handleInputChange(e, rowIdx, column)}
                                   className="form-select px-4 py-2 rounded-md w-64 border border-gray-300"
                                 >
                                   {typeOptions.map((option, idx) => (
                                     <option key={idx} value={option}>
-                                      {option}
+                                      {option.length > 20 ? `${option.slice(0, 20)}...` : option}
                                     </option>
                                   ))}
                                 </select>
@@ -280,10 +251,9 @@ const JobCalculator = () => {
                                   className="px-2 py-1 w-16 border border-gray-300 rounded"
                                 />
                               ) : (
-                                (row[column] === '' ? '0' : row[column])
+                                row[column]?.length > 20 ? `${row[column].slice(0, 20)}...` : (row[column] === '' ? '0' : row[column])
                               )}
                             </td>
-
                           ))}
                         </tr>
                       ))}
