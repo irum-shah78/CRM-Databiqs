@@ -62,11 +62,15 @@ const JobCalculator = () => {
 
       setLoading(true);
       try {
-        const response = await axios.post('https://job-calculator-dan-01-hwa8c4czf7c6h5ec.westus-01.azurewebsites.net/uploadfile/', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        const response = await axios.post(
+          'https://job-calculator-dan-01-hwa8c4czf7c6h5ec.westus-01.azurewebsites.net/uploadfile/',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
 
         const extractedData = response.data;
         console.log('Extracted Data:', extractedData);
@@ -77,7 +81,29 @@ const JobCalculator = () => {
             notes: item.notes || '0',
             totalLabor: item.totalLabor || '0',
           }));
-          setData(updatedData);
+
+          const totalRows = 24;
+          const remainingRows = totalRows - updatedData.length;
+
+          if (remainingRows > 0) {
+            const defaultRows = [...Array(remainingRows)].map((_, idx) => ({
+              id: String(updatedData.length + idx + 1).padStart(2, '0'),
+              room: '001',
+              width: '001',
+              height: '001',
+              type: '',
+              panel: 'OX',
+              quantity: '001',
+              price: '180',
+              additionalLabor: '-----',
+              notes: 'notes',
+              totalLabor: '001',
+            }));
+
+            setData([...updatedData, ...defaultRows]);
+          } else {
+            setData(updatedData);
+          }
         }
       } catch (error) {
         console.error('Error uploading file:', error);
