@@ -12,6 +12,9 @@ import Tasks from './pages/tasksandfollowup/TasksFollowup.jsx';
 import AddTask from './components/addtask/AddTask.jsx';
 import Permit from './pages/permithoaprop/PermitHoa.jsx';
 import Chatbot from './components/chatbot/ChatBot.jsx';
+import Commissions from './pages/commissions/Commissions.jsx';
+import AddCommission from './components/addcommission/AddCommission.jsx';
+import EditCommission from './components/editcommission/EditCommission.jsx';
 
 function App() {
   return (
@@ -36,6 +39,9 @@ function App() {
               <Route path="/tasks" element={<Tasks />} />
               <Route path="/addtask" element={<AddTask />} />
               <Route path="/permit-hoa" element={<Permit />} />
+              <Route path="/commissions" element={<Commissions />} />
+              <Route path="/addcommissions" element={<AddCommission />} />
+              <Route path="/commissions/:id" element={<EditCommission />} />
             </Routes>
           </div>
         </div>

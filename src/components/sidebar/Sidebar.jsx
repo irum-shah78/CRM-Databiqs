@@ -34,10 +34,10 @@ const Sidebar = () => {
         { name: "General Tasks", link: "/tasks/general" },
       ],
     },
-    { name: "Commissions", icon: commissionsIcon, link: "/commissions" },
     { name: "Jobs", icon: jobSubmissionIcon, link: "/jobs" },
     { name: "Project Management", icon: projectManagementIcon, link: "/project-management" },
     { name: "Payment Section", icon: paymentIcon, link: "/payment-section" },
+    { name: "Commissions", icon: commissionsIcon, link: "/commissions" },
     { name: "Permit & HOA Approval", icon: permitIcon, link: "/permit-hoa" },
   ];
 

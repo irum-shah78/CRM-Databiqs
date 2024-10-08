@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import searchIcon from "../../assets/search.svg";
 import listView from "../../assets/listView.svg";
 import kanbanView from "../../assets/kanbanView.svg";
@@ -8,9 +8,13 @@ import filterDropdown from "../../assets/filter-dropdown.svg";
 import calender from "../../assets/calender.svg";
 import filterInactive from "../../assets/white-filter.svg";
 
-const Tasks = () => {
+const Commissions = () => {
   const [activeButton, setActiveButton] = useState();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [commissions, setCommissions] = useState([]);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleButtonClick = (button) => {
     setActiveButton(button);
@@ -21,16 +25,37 @@ const Tasks = () => {
     }
   };
 
-  const navigate = useNavigate();
   const handleJobCalcClick = () => {
     navigate('/addcommissions');
+  };
+
+  useEffect(() => {
+    const newCommission = location.state?.newCommission;
+
+    if (newCommission) {
+      const id = commissions.length ? Math.max(commissions.map(c => c.id)) + 1 : 1;
+      const commissionWithId = { ...newCommission, id };
+
+      setCommissions((prevCommissions) => {
+        const exists = prevCommissions.some(commission => commission.id === commissionWithId.id);
+        if (!exists) {
+          return [...prevCommissions, commissionWithId];
+        }
+        return prevCommissions;
+      });
+    }
+  }, [location.state]);
+
+  const handleRowClick = (commission) => {
+    console.log("Commission clicked:", commission.customerName);
+    navigate(`/commissions/${commission.id}`, { state: { commission } });
   };
 
   return (
     <div className="flex min-h-screen xl:w-full lg:w-[700px] md:w-[460px] w-80 lg:p-0 lg:mt-0 mt-4">
       <div className="flex-1 p-6 bg-gray-50 overflow-auto pt-0">
         <div className="flex lg:flex-row flex-col justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Tasks & Follow-up</h1>
+          <h1 className="text-2xl font-bold">Commissions</h1>
           <div className="flex items-center justify-center space-x-4 h-[50px] mt-4 md:mt-0">
             <div className="relative w-full max-w-[238px]">
               <img
@@ -40,12 +65,12 @@ const Tasks = () => {
               />
               <input
                 type="text"
-                placeholder="Search Tasks"
+                placeholder="Search Commission"
                 className="border border-gray-300 rounded-lg py-2 pl-10 pr-4 w-full"
               />
             </div>
             <button className="bg-[#7234D7] text-white xl:px-4 xl:py-2 px-2 py-1 rounded-md xl:text-base text-sm" onClick={handleJobCalcClick}>
-              Add Task
+              Add Commission
             </button>
           </div>
         </div>
@@ -127,27 +152,33 @@ const Tasks = () => {
               <table className="min-w-full table-auto divide-y divide-gray-200">
                 <thead className="bg-[#F4F7F9] rounded-xl">
                   <tr>
-                    {['Id', 'Task Name', 'Task Owner', 'Task Description', 'Status', 'Assigned To', 'Priority', 'Attachment', 'Deadline'].map((header) => (
+                    {['Id', 'Customer Name', 'Address', 'Phone No', 'Email', 'Deal Name', 'Deal Owner', 'Job Stage', 'Commission Amount'].map((header) => (
                       <th key={header} className="py-2 px-4 text-center text-sm font-medium tracking-wider">
                         {header}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {[...Array(10)].map((_, idx) => (
-                    <tr key={idx} className={idx % 2 !== 0 ? 'bg-gray-100' : ''}>
-                      <td className="px-6 py-4 text-center">01</td>
-                      <td className="px-6 py-4 text-center">Facebook</td>
-                      <td className="px-6 py-4 text-center">Daniel</td>
-                      <td className="px-6 py-4 text-center">Lorem..</td>
-                      <td className="px-6 py-4 text-center text-[#165E3D]">Completed</td>
-                      <td className="px-6 py-4 text-center">Jawad</td>
-                      <td className="px-6 py-4 text-center">Normal</td>
-                      <td className="px-6 py-4 text-center text-[#7234D7]">Download</td>
-                      <td className="px-6 py-4 text-center">09.10.24</td>
+                <tbody className="bg-white divide-y divide-gray-200 cursor-pointer">
+                  {commissions.length > 0 ? (
+                    commissions.map((commission, idx) => (
+                      <tr key={commission.id} className={idx % 2 !== 0 ? 'bg-gray-100' : ''} onClick={() => handleRowClick(commission)}>
+                        <td className="px-6 py-4 text-center">{commission.id || idx + 1}</td>
+                        <td className="px-6 py-4 text-center">{commission.customerName}</td>
+                        <td className="px-6 py-4 text-center">{commission.address}</td>
+                        <td className="px-6 py-4 text-center">{commission.phoneNo}</td>
+                        <td className="px-6 py-4 text-center">{commission.email}</td>
+                        <td className="px-6 py-4 text-center">{commission.dealName}</td>
+                        <td className="px-6 py-4 text-center">{commission.dealOwner}</td>
+                        <td className="px-6 py-4 text-center">{commission.jobStage}</td>
+                        <td className="px-6 py-4 text-center">{commission.commissionAmount}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="9" className="text-center py-4">No commissions available</td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
@@ -158,4 +189,4 @@ const Tasks = () => {
   );
 };
 
-export default Tasks;
+export default Commissions;

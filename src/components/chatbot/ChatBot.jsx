@@ -43,7 +43,7 @@ const Chatbot = () => {
       {isOpen && (
         <div className="bg-white shadow-lg rounded-lg w-72 md:w-96 fixed bottom-5 right-5 p-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-bold">Chatbot</h2>
+            <h2 className="text-lg font-bold">Chat</h2>
             <button onClick={() => setIsOpen(false)} className="text-gray-600 hover:text-gray-900">
               <FontAwesomeIcon icon={faTimes} size="lg" />
             </button>
