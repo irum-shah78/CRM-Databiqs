@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments, faTimes } from '@fortawesome/free-solid-svg-icons';
+import Loader from '../loader/Loader';
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [question, setQuestion] = useState('');
-  const [response, setResponse] = useState('');
+  const [chatHistory, setChatHistory] = useState([]);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const chatContainerRef = useRef(null);
 
   const handleInputChange = (e) => {
     setQuestion(e.target.value);
@@ -15,19 +18,32 @@ const Chatbot = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!question.trim()) return;
+
+    setChatHistory((prev) => [...prev, { type: 'user', text: question }]);
+    setLoading(true);
+
     try {
       const result = await axios.post(
         `https://chatbot-backend-fastapi-g0fyfwctdehedjay.westus-01.azurewebsites.net/query?question=${question}`
       );
       console.log(result.data);
-      setResponse(result.data.answer);
+      setChatHistory((prev) => [...prev, { type: 'bot', text: result.data.answer }]);
       setError('');
     } catch (err) {
       console.error('Error fetching data:', err);
       setError('Failed to fetch response. Please try again.');
-      setResponse('');
+    } finally {
+      setQuestion('');
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatHistory]);
 
   return (
     <div className="fixed bottom-5 right-5 z-50">
@@ -49,19 +65,28 @@ const Chatbot = () => {
             </button>
           </div>
 
-          {response && (
-            <div className="mt-4 p-3 bg-green-100 rounded shadow-md">
-              <h3 className="font-bold">Response:</h3>
-              <p>{response}</p>
-            </div>
-          )}
+          <div ref={chatContainerRef} className="mt-4 h-52 overflow-y-auto">
+            {chatHistory.map((chat, index) => (
+              <div key={index} className={`p-3 rounded mb-2 shadow-md ${chat.type === 'user' ? 'bg-blue-100' : 'bg-green-100'}`}>
+                <strong>{chat.type === 'user' ? 'You:' : 'Bot:'}</strong>
+                <p>{chat.text}</p>
+              </div>
+            ))}
 
-          {error && (
-            <div className="mt-4 p-3 bg-red-100 rounded shadow-md">
-              <h3 className="font-bold">Error:</h3>
-              <p>{error}</p>
-            </div>
-          )}
+            {loading && (
+              <div className="p-3 rounded mb-2 shadow-md bg-gray-100">
+                <strong>Bot:</strong>
+                <p><Loader /></p>
+              </div>
+            )}
+
+            {error && (
+              <div className="mt-4 p-3 bg-red-100 rounded shadow-md">
+                <h3 className="font-bold">Error:</h3>
+                <p>{error}</p>
+              </div>
+            )}
+          </div>
 
           <form onSubmit={handleSubmit} className="mt-4">
             <input
