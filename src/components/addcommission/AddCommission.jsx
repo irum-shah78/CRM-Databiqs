@@ -30,7 +30,7 @@ const AddCommission = () => {
   }, [location.state]);
 
   const handleTask = () => {
-    navigate('/commissions');
+    navigate('/financials/commissions');
   };
 
   const handleInputChange = (e) => {
@@ -58,7 +58,7 @@ const AddCommission = () => {
       notes: ''
     });
 
-    navigate('/commissions', { state: { newCommission: formData } });
+    navigate('/financials/commissions', { state: { newCommission: formData } });
   };
   return (
     <div className="w-full mx-auto p-6 pt-0 lg:mt-0 mt-4">

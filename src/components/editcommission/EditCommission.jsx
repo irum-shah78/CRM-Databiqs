@@ -25,7 +25,7 @@ const EditCommission = () => {
   });
 
   const handleTask = () => {
-    navigate('/commissions');
+    navigate('/financials/commissions');
   };
 
   const handleInputChange = (e) => {

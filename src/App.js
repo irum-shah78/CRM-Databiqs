@@ -39,7 +39,7 @@ function App() {
               <Route path="/tasks" element={<Tasks />} />
               <Route path="/addtask" element={<AddTask />} />
               <Route path="/permit-hoa" element={<Permit />} />
-              <Route path="/commissions" element={<Commissions />} />
+              <Route path="/financials/commissions" element={<Commissions />} />
               <Route path="/addcommissions" element={<AddCommission />} />
               <Route path="/commissions/:id" element={<EditCommission />} />
             </Routes>
