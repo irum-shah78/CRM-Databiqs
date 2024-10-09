@@ -85,7 +85,7 @@ const Commissions = () => {
                   <option value="50">50</option>
                   <option value="100">100</option>
                 </select>
-                <span className="lg:ml-2 lg:mr-4  text-[#666666]">Entities</span>
+                <span className="lg:ml-2 lg:mr-4 text-[#666666]">Entities</span>
               </div>
             </div>
             <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
@@ -148,12 +148,20 @@ const Commissions = () => {
           </div>
 
           <div className="bg-white overflow-hidden w-full h-full">
-            <div className="max-h-[500px] overflow-y-auto w-full">
+            <div className="max-h-[500px] overflow-x-auto overflow-y-auto xl:w-[1100px] w-full">
               <table className="min-w-full table-auto divide-y divide-gray-200">
                 <thead className="bg-[#F4F7F9] rounded-xl">
                   <tr>
-                    {['Id', 'Customer Name', 'Address', 'Phone No', 'Email', 'Deal Name', 'Deal Owner', 'Job Stage', 'Commission Amount'].map((header) => (
-                      <th key={header} className="py-2 px-4 text-center text-sm font-medium tracking-wider">
+                    {[
+                      'Id', 'Customer Name', 'Address', 'Phone No', 'Email', 'Deal Name', 'Deal Owner',
+                      'Job Stage', 'Commission Amount', 'First Payment Amount', 'First Payment Status',
+                      'Deposit Payment Amount', 'Backend Payment Status', 'Job Costing', 'Job Notes'
+                    ].map((header) => (
+                      <th
+                        key={header}
+                        className="py-2 px-8 text-center text-sm font-medium tracking-wider whitespace-nowrap overflow-hidden text-ellipsis"
+                        title={header}
+                      >
                         {header}
                       </th>
                     ))}
@@ -172,11 +180,17 @@ const Commissions = () => {
                         <td className="px-6 py-4 text-center">{commission.dealOwner}</td>
                         <td className="px-6 py-4 text-center">{commission.jobStage}</td>
                         <td className="px-6 py-4 text-center">{commission.commissionAmount}</td>
+                        <td className="px-6 py-4 text-center">{commission.firstPay}</td>
+                        <td className="px-6 py-4 text-center">{commission.status}</td>
+                        <td className="px-6 py-4 text-center">{commission.depositAmount}</td>
+                        <td className="px-6 py-4 text-center">{commission.backendPay}</td>
+                        <td className="px-6 py-4 text-center">{commission.jobCosting}</td>
+                        <td className="px-6 py-4 text-center">{commission.notes}</td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="9" className="text-center py-4">No commissions available</td>
+                      <td colSpan={14} className="text-center py-4">No commissions available</td>
                     </tr>
                   )}
                 </tbody>

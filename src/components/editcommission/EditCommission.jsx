@@ -60,6 +60,26 @@ const EditCommission = () => {
   }, [commission]);
 
 
+  const handleDelete = () => {
+    setFormData({
+      customerName: '',
+      address: '',
+      phoneNo: '',
+      email: '',
+      dealName: '',
+      dealOwner: '',
+      jobStage: '',
+      commissionAmount: '',
+      firstPay: '',
+      status: '',
+      depositAmount: '',
+      backendPay: '',
+      jobCosting: '',
+      notes: '',
+    });
+  };
+
+
   return (
     <div className="w-full mx-auto p-6 pt-0 lg:mt-0 mt-4">
       <div className="flex lg:flex-row flex-col justify-between items-center mb-6">
@@ -83,7 +103,7 @@ const EditCommission = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-semibold">Commission Details</h2>
-            <img src={del} alt="del-icon" className="cursor-pointer" />
+            <img src={del} alt="del-icon" className="cursor-pointer" onClick={handleDelete} />
           </div>
           <hr className="text-[#D1D1D1]" />
 
