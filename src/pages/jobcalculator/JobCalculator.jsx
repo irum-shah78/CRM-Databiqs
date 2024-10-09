@@ -291,7 +291,7 @@ const JobCalculator = () => {
           )}
         </div>
 
-        <div>
+        <div className="bg-white overflow-x-auto shadow-md rounded-lg p-4 mt-4">
           <div className="grid xl:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-2 mt-3 p-4 ">
             {[
               'Municipality', 'Contract Total', 'Engineering Cost', 'Commissionable Amount', 'Permit',

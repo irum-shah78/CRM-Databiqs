@@ -12,6 +12,7 @@ const Commissions = () => {
   const [activeButton, setActiveButton] = useState();
   const [showDropdown, setShowDropdown] = useState(false);
   const [commissions, setCommissions] = useState([]);
+  const [isNewCommissionAdded, setIsNewCommissionAdded] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,6 +31,30 @@ const Commissions = () => {
   };
 
   useEffect(() => {
+    if (!isNewCommissionAdded) {
+      const dummyData = Array.from({ length: 24 }, (_, index) => ({
+        id: index + 1,
+        customerName: `Loreum`,
+        address: `Loreum`,
+        phoneNo: `Loreum`,
+        email: `Loreum`,
+        dealName: `Loreum`,
+        dealOwner: `Loreum`,
+        jobStage: `Loreum`,
+        commissionAmount: `Loreum`,
+        firstPay: `Loreum`,
+        status: 'Loreum',
+        depositAmount: `Loreum`,
+        backendPay: `Loreum`,
+        jobCosting: `Loreum`,
+        notes: `Loreum`
+      }));
+
+      setCommissions(dummyData);
+    }
+  }, [isNewCommissionAdded]);
+
+  useEffect(() => {
     const newCommission = location.state?.newCommission;
 
     if (newCommission) {
@@ -39,12 +64,13 @@ const Commissions = () => {
       setCommissions((prevCommissions) => {
         const exists = prevCommissions.some(commission => commission.id === commissionWithId.id);
         if (!exists) {
-          return [...prevCommissions, commissionWithId];
+          setIsNewCommissionAdded(true);
+          return [commissionWithId];
         }
         return prevCommissions;
       });
     }
-  }, [location.state]);
+  }, [location.state, commissions]);
 
   const handleRowClick = (commission) => {
     console.log("Commission clicked:", commission.customerName);
@@ -159,7 +185,7 @@ const Commissions = () => {
                     ].map((header) => (
                       <th
                         key={header}
-                        className="py-2 px-8 text-center text-sm font-medium tracking-wider whitespace-nowrap overflow-hidden text-ellipsis"
+                        className="py-2 px-4 text-center text-sm font-medium tracking-wider whitespace-nowrap overflow-hidden text-ellipsis"
                         title={header}
                       >
                         {header}
