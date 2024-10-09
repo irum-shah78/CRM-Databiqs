@@ -141,7 +141,7 @@ const JobCalculator = () => {
     profitPercentage: '',
     water: '',
     jobProfit: '',
-    finance: ''
+    financing: ''
   });
 
   const handleSaveChange = () => {
@@ -301,7 +301,7 @@ const JobCalculator = () => {
           )}
         </div>
 
-        <div className="bg-white overflow-x-auto shadow-md rounded-lg p-4 mt-4">
+        {/* <div className="bg-white overflow-x-auto shadow-md rounded-lg p-4 mt-4">
           <div className="grid xl:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-2 mt-3 p-4">
             <div className="xl:col-span-2 lg:col-span-2 col-span-1 border-b pb-4">
               {['Custom Terms', 'Custom Terms Notes', 'Terms Selection'].map((label, idx) => (
@@ -351,12 +351,13 @@ const JobCalculator = () => {
               <label className="w-44 text-sm text-gray-700 capitalize font-semibold">Finance</label>
               {isEditing ? (
                 <select
-                  value={formData['finance'] || ''}
+                  value={formData['financing'] || ''}
                   onChange={(e) => setFormData({ ...formData, finance: e.target.value })}
                   className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
                 >
                   <option value="">Select</option>
-                  <option value="Finance">Financing</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Cash">Cash</option>
                   <option value="Financing Plan">Financing Plan</option>
                 </select>
               ) : (
@@ -440,6 +441,201 @@ const JobCalculator = () => {
                     onClick={handleConfirmAddField}
                   >
                     Add Field
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div> */}
+
+        <div className="bg-white overflow-x-auto shadow-md rounded-lg p-4 mt-4">
+          <div className="grid xl:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-2 mt-3 p-4">
+            <div className="xl:col-span-2 lg:col-span-2 col-span-1 border-b pb-4">
+              {['Custom Terms', 'Custom Terms Notes', 'Terms Selection'].map((label, idx) => (
+                <div key={idx} className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
+                  <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{label}</label>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      placeholder="Enter value"
+                      value={formData[label.toLowerCase()] || ''}
+                      onChange={(e) => setFormData({ ...formData, [label.toLowerCase()]: e.target.value })}
+                      className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                    />
+                  ) : (
+                    <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                      {formData[label.toLowerCase()] || 'Enter Value'}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {[
+              'Deposit', 'Material Delivery', 'Material Delivery Payment 2', 'Final Payment',
+              'Contract Total', 'Labor Cost', 'Material Amount', 'Shutter Cost', 'Credit Card Fees Amount',
+              'Engineering Cost', 'Profit Percentage', 'Commissionable Amount', 'Commission Amount'
+            ].map((label, idx) => (
+              <div key={idx} className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
+                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{label}</label>
+                {isEditing ? (
+                  <div className="flex-1 flex items-center gap-2">
+                    <input
+                      type="text"
+                      placeholder="Enter percentage"
+                      value={formData[`${label.toLowerCase()}Percentage`] || ''}
+                      onChange={(e) => setFormData({ ...formData, [`${label.toLowerCase()}Percentage`]: e.target.value })}
+                      className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-1/3"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Enter amount"
+                      value={formData[`${label.toLowerCase()}Amount`] || ''}
+                      onChange={(e) => setFormData({ ...formData, [`${label.toLowerCase()}Amount`]: e.target.value })}
+                      className="border border-gray-300 rounded-lg py-2 px-4 mt-1 flex-1"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex-1 flex items-center gap-2">
+                    <span className="w-1/3 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                      {formData[`${label.toLowerCase()}Percentage`] || '0%'}
+                    </span>
+                    <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                      {formData[`${label.toLowerCase()}Amount`] || '$0.00'}
+                    </span>
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {[
+              'Type Of Structure', 'Construction Types', 'Municipality', 'Engineering Needed', 'Permit', 'Shutters',
+              'Caulking and Screws', 'Scaffold', 'Miscellaneous', 'Water', 'Job Profit'
+            ].map((label, idx) => (
+              <div key={idx} className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
+                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{label}</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    placeholder="Enter value"
+                    value={formData[label.toLowerCase()] || ''}
+                    onChange={(e) => setFormData({ ...formData, [label.toLowerCase()]: e.target.value })}
+                    className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                  />
+                ) : (
+                  <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                    {formData[label.toLowerCase()] || 'Enter Value'}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
+            <label className="w-44 text-sm text-gray-700 capitalize font-semibold">Finance</label>
+            {isEditing ? (
+              <select
+                value={formData['finance'] || ''}
+                onChange={(e) => setFormData({ ...formData, finance: e.target.value })}
+                className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+              >
+                <option value="">Select</option>
+                <option value="Finance">Finance</option>
+                <option value="Cash">Cash</option>
+                <option value="Financing Plan">Financing Plan</option>
+              </select>
+            ) : (
+              <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                {formData['finance'] || 'Select Finance'}
+              </span>
+            )}
+
+            <div className="flex gap-4 flex-1">
+              <div className="w-1/2">
+                {isEditing ? (
+                  <input
+                    type="text"
+                    placeholder="Amount"
+                    value={formData['finance_amount'] || ''}
+                    onChange={(e) => setFormData({ ...formData, finance_amount: e.target.value })}
+                    className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-full"
+                  />
+                ) : (
+                  <span className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-full text-gray-700">
+                    {formData['finance_amount'] ? `$${parseFloat(formData['finance_amount']).toFixed(2)}` : '$0.00'}
+                  </span>
+                )}
+              </div>
+
+              <div className="w-1/2">
+                {isEditing ? (
+                  <input
+                    type="text"
+                    placeholder="Percentage"
+                    value={formData['finance_percentage'] || ''}
+                    onChange={(e) => setFormData({ ...formData, finance_percentage: e.target.value })}
+                    className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-full"
+                  />
+                ) : (
+                  <span className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-full text-gray-700">
+                    {formData['finance_percentage'] ? `${formData['finance_percentage']}%` : '0%'}
+                  </span>
+                )}
+              </div>
+            </div>
+
+          </div>
+
+          <div className="flex items-center gap-4 mt-5">
+            {isEditing ? (
+              <>
+                <button
+                  className="bg-[#7234D7] text-white px-4 py-2 rounded"
+                  onClick={handleSaveChange}
+                >
+                  Save Changes
+                </button>
+                <button
+                  className="bg-gray-400 text-white px-4 py-2 rounded"
+                  onClick={handleAddField}
+                >
+                  Add Field
+                </button>
+              </>
+            ) : (
+              <button
+                className="flex items-center gap-2 border border-gray-400 rounded px-5 py-2"
+                onClick={() => setIsEditing(true)}
+              >
+                <img src={editIcon} alt="edit icon" />
+                <span className="text-[#7234D7]">Edit</span>
+              </button>
+            )}
+          </div>
+
+          {showModal && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
+              <div className="bg-white p-6 rounded shadow-lg">
+                <h3 className="text-lg font-semibold mb-3">Add New Field</h3>
+                <input
+                  type="text"
+                  placeholder="Enter field name"
+                  value={newFieldLabel}
+                  onChange={(e) => setNewFieldLabel(e.target.value)}
+                  className="border border-gray-300 rounded-lg py-2 px-4 mb-4 w-full"
+                />
+                <div className="flex justify-end gap-4">
+                  <button
+                    className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="bg-[#7234D7] text-white px-4 py-2 rounded"
+                    onClick={handleConfirmAddField}
+                  >
+                    Add
                   </button>
                 </div>
               </div>
