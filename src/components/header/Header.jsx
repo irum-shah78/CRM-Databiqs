@@ -3,9 +3,15 @@ import logo from "../../assets/logo.svg";
 import profileImage from "../../assets/profile-img.svg";
 import notification from "../../assets/notification.svg";
 import profileDropdown from "../../assets/profile-dropdown.svg";
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate('/');
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -24,8 +30,8 @@ const Header = () => {
 
   return (
     <>
-      <header className="flex items-center justify-between px-8 h-[80px] bg-white shadow-md lg:w-full md:w-full w-[400px]">
-        <div className="flex items-center">
+      <header className="flex items-center justify-between px-8 h-[80px] bg-white shadow-md lg:w-full md:w-full w-[400px] z-50">
+        <div className="flex items-center cursor-pointer" onClick={handleClick}>
           <img src={logo} alt="Logo" className="w-8 h-8" />
           <span className="ml-2 text-xl font-bold text-[#4508A8]">Crystalyze</span>
         </div>

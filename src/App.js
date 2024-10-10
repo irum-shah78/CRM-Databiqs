@@ -22,7 +22,7 @@ function App() {
       <Router>
         <Header />
         <div className="flex">
-          <div className="w-72">
+          <div className="">
             <Sidebar />
           </div>
 

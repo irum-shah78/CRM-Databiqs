@@ -75,13 +75,17 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="relative ps-3 pb-0 pt-3 pe-3 lg:w-72 md:w-72">
-      <div className="md:hidden flex justify-between items-center p-4 bg-white shadow-md">
+    <div className="relative ps-3 pb-0 pt-3 pe-3">
+      <div className="flex justify-between items-center p-4 bg-white shadow-md">
         <button className="text-xl" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
           <FontAwesomeIcon icon={faBars} />
         </button>
       </div>
-      <div className={`min-h-screen fixed inset-y-0 left-0 w-18 lg:w-72 md:w-72 bg-white shadow-md rounded-xl transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:relative transition-transform duration-300 ease-in-out`}>
+
+      <div
+        className={`min-h-screen fixed inset-y-0 left-0 lg:w-72 md:w-72 bg-white shadow-md rounded-xl transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 ease-in-out z-50`}
+      >
         <nav className="flex flex-col space-y-2 p-4">
           {menuItems.map((item) => (
             <React.Fragment key={item.name}>
@@ -89,9 +93,7 @@ const Sidebar = () => {
                 <div className="flex flex-col">
                   <div
                     onClick={() => toggleDropdown(item.name)}
-                    className={`flex items-center space-x-3 p-2 rounded-lg cursor-pointer ${activeItem === item.name || item.subMenu.some(subItem => location.pathname === subItem.link) ?
-                        "text-[#4508A8] font-semibold bg-gray-100" : "text-[#666666]"
-                      } hover:bg-gray-200`}
+                    className={`flex items-center space-x-3 p-2 rounded-lg cursor-pointer ${activeItem === item.name || item.subMenu.some(subItem => location.pathname === subItem.link) ? "text-[#4508A8] font-semibold bg-gray-100" : "text-[#666666]"} hover:bg-gray-200`}
                   >
                     <img src={item.icon} alt={`${item.name} icon`} className="w-5 h-5" />
                     <span className="hidden md:block text-base">{item.name}</span>
@@ -128,13 +130,15 @@ const Sidebar = () => {
           ))}
         </nav>
       </div>
+
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black opacity-50 z-40 md:hidden"
+          className="fixed inset-0 bg-black opacity-50 z-40"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
     </div>
+
   );
 };
 
