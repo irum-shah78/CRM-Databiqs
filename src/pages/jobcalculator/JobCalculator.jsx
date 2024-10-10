@@ -154,7 +154,7 @@ const JobCalculator = () => {
     }
   };
 
-  const handleInputChange = (e, rowIdx, column) => {
+  const handleInputChangee = (e, rowIdx, column) => {
     const updatedData = [...data];
     updatedData[rowIdx][column] = e.target.value;
     setData(updatedData);
@@ -266,7 +266,7 @@ const JobCalculator = () => {
                               {column === 'type' ? (
                                 <select
                                   value={typeOptions.includes(row[column]) ? row[column] : ' '}
-                                  onChange={(e) => handleInputChange(e, rowIdx, column)}
+                                  onChange={(e) => handleInputChangee(e, rowIdx, column)}
                                   className="form-select px-4 py-2 rounded-md w-64 border border-gray-300"
                                 >
                                   {typeOptions.map((option, idx) => (
@@ -281,7 +281,7 @@ const JobCalculator = () => {
                                 <input
                                   type="text"
                                   value={row[column]}
-                                  onChange={(e) => handleInputChange(e, rowIdx, column)}
+                                  onChange={(e) => handleInputChangee(e, rowIdx, column)}
                                   onBlur={handleBlur}
                                   autoFocus
                                   className="px-2 py-1 w-16 border border-gray-300 rounded"
@@ -300,153 +300,6 @@ const JobCalculator = () => {
             </div>
           )}
         </div>
-
-        {/* <div className="bg-white overflow-x-auto shadow-md rounded-lg p-4 mt-4">
-          <div className="grid xl:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-2 mt-3 p-4">
-            <div className="xl:col-span-2 lg:col-span-2 col-span-1 border-b pb-4">
-              {['Custom Terms', 'Custom Terms Notes', 'Terms Selection'].map((label, idx) => (
-                <div key={idx} className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
-                  <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{label}</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      placeholder="Enter value"
-                      value={formData[label.toLowerCase()]}
-                      onChange={(e) => setFormData({ ...formData, [label.toLowerCase()]: e.target.value })}
-                      className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
-                    />
-                  ) : (
-                    <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                      {formData[label.toLowerCase()] || 'Enter Value'}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
-            {[
-              'Type Of Structure', 'Construction Types', 'Municipality', 'Contract Total', 'Engineering Needed', 'Engineering Cost', 'Engineering Fees', 'Commissionable Amount', 'Permit',
-              'Labor Cost', 'Credit Card Fees', 'Credit Card Fees Amount', 'Material Amount', 'Shutters', 'Shutter Cost', 'Material Tax',
-              'Caulking and Screws', 'Commission Percentage', 'Scaffold', 'Commission Amount', 'Miscellaneous',
-              'Profit Percentage', 'Water', 'Job Profit'
-            ].map((label, idx) => (
-              <div key={idx} className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
-                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{label}</label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    placeholder="Enter value"
-                    value={formData[label.toLowerCase()]}
-                    onChange={(e) => setFormData({ ...formData, [label.toLowerCase()]: e.target.value })}
-                    className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
-                  />
-                ) : (
-                  <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                    {formData[label.toLowerCase()] || 'Enter Value'}
-                  </span>
-                )}
-              </div>
-            ))}
-
-            <div className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
-              <label className="w-44 text-sm text-gray-700 capitalize font-semibold">Finance</label>
-              {isEditing ? (
-                <select
-                  value={formData['financing'] || ''}
-                  onChange={(e) => setFormData({ ...formData, finance: e.target.value })}
-                  className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
-                >
-                  <option value="">Select</option>
-                  <option value="Finance">Finance</option>
-                  <option value="Cash">Cash</option>
-                  <option value="Financing Plan">Financing Plan</option>
-                </select>
-              ) : (
-                <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                  {formData['finance'] || 'Select Finance'}
-                </span>
-              )}
-            </div>
-
-            {newFields.map((field, idx) => (
-              <div key={idx + 100} className="flex items-center gap-2">
-                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{field.label}</label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    placeholder="Enter value"
-                    value={field.value}
-                    onChange={(e) => {
-                      const updatedFields = [...newFields];
-                      updatedFields[idx].value = e.target.value;
-                      setNewFields(updatedFields);
-                    }}
-                    className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
-                  />
-                ) : (
-                  <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                    {field.value || 'Enter Value'}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-4 mt-5">
-            {isEditing ? (
-              <>
-                <button
-                  className="bg-[#7234D7] text-white px-4 py-2 rounded"
-                  onClick={handleSaveChange}
-                >
-                  Save Changes
-                </button>
-                <button
-                  className="bg-gray-400 text-white px-4 py-2 rounded"
-                  onClick={handleAddField}
-                >
-                  Add Field
-                </button>
-              </>
-            ) : (
-              <button
-                className="flex items-center gap-2 border border-gray-400 rounded px-5 py-2"
-                onClick={() => setIsEditing(true)}
-              >
-                <img src={editIcon} alt="edit icon" />
-                <span className="text-[#7234D7]">Edit</span>
-              </button>
-            )}
-          </div>
-
-          {showModal && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
-              <div className="bg-white p-6 rounded shadow-lg">
-                <h3 className="text-lg font-semibold mb-3">Add New Field</h3>
-                <input
-                  type="text"
-                  placeholder="Enter field name"
-                  value={newFieldLabel}
-                  onChange={(e) => setNewFieldLabel(e.target.value)}
-                  className="border border-gray-300 rounded-lg py-2 px-4 mb-4 w-full"
-                />
-                <div className="flex justify-end gap-4">
-                  <button
-                    className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="bg-[#7234D7] text-white px-4 py-2 rounded"
-                    onClick={handleConfirmAddField}
-                  >
-                    Add Field
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div> */}
 
         <div className="bg-white overflow-x-auto shadow-md rounded-lg p-4 mt-4">
           <div className="grid xl:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-2 mt-3 p-4">
