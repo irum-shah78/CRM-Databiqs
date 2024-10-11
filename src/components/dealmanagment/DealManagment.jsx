@@ -14,7 +14,7 @@ const DealManagment = () => {
   };
 
   return (
-    <div className="flex min-h-screen xl:w-full lg:w-[700px] md:w-[460px] w-80 lg:p-0 lg:mt-0 mt-4">
+    <div className="flex min-h-screen xl:w-full lg:w-[850px] md:w-[650px] w-80 lg:p-0 lg:mt-0 mt-4">
       <div className="flex-1 p-6 bg-gray-50 overflow-auto pt-0">
         <div className="flex lg:flex-row flex-col justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Deal Managment</h1>
