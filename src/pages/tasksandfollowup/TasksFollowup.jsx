@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import searchIcon from "../../assets/search.svg";
 import listView from "../../assets/listView.svg";
 import kanbanView from "../../assets/kanbanView.svg";
@@ -14,7 +14,7 @@ const Tasks = () => {
 
   const handleButtonClick = (button) => {
     setActiveButton(button);
-    if (button === 'Filter') {
+    if (button === "Filter") {
       setShowDropdown(!showDropdown);
     } else {
       setShowDropdown(false);
@@ -23,7 +23,7 @@ const Tasks = () => {
 
   const navigate = useNavigate();
   const handleJobCalcClick = () => {
-    navigate('/addcommissions');
+    navigate("/addcommissions");
   };
 
   return (
@@ -44,7 +44,10 @@ const Tasks = () => {
                 className="border border-gray-300 rounded-lg py-2 pl-10 pr-4 w-full"
               />
             </div>
-            <button className="bg-[#7234D7] text-white xl:px-4 xl:py-2 px-2 py-1 rounded-md xl:text-base text-sm" onClick={handleJobCalcClick}>
+            <button
+              className="bg-[#7234D7] text-white xl:px-4 xl:py-2 px-2 py-1 rounded-md xl:text-base text-sm"
+              onClick={handleJobCalcClick}
+            >
               Add Task
             </button>
           </div>
@@ -60,40 +63,61 @@ const Tasks = () => {
                   <option value="50">50</option>
                   <option value="100">100</option>
                 </select>
-                <span className="lg:ml-2 lg:mr-4  text-[#666666]">Entities</span>
+                <span className="lg:ml-2 lg:mr-4  text-[#666666]">
+                  Entities
+                </span>
               </div>
             </div>
             <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
               <button
-                className={`${activeButton === 'ListView' ? 'bg-[#7234D7] text-white' : 'border border-[#B3B3B3]'
+                className={`${activeButton === "ListView"
+                    ? "bg-[#7234D7] text-white"
+                    : "border border-[#B3B3B3]"
                   } xl:px-4 xl:py-2 px-2 py-1 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm`}
-                onClick={() => handleButtonClick('ListView')}
+                onClick={() => handleButtonClick("ListView")}
               >
-                <img src={activeButton === 'ListView' ? listView : kanbanView} alt="listView" />
+                <img
+                  src={activeButton === "ListView" ? listView : kanbanView}
+                  alt="listView"
+                />
                 List View
               </button>
               <button
-                className={`${activeButton === 'KanbanView' ? 'bg-[#7234D7] text-white' : 'border border-[#B3B3B3]'
+                className={`${activeButton === "KanbanView"
+                    ? "bg-[#7234D7] text-white"
+                    : "border border-[#B3B3B3]"
                   } xl:px-4 xl:py-2 px-2 py-1 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm`}
-                onClick={() => handleButtonClick('KanbanView')}
+                onClick={() => handleButtonClick("KanbanView")}
               >
-                <img src={activeButton === 'KanbanView' ? filterInactive : kanbanView} alt="kanbanView" />
+                <img
+                  src={
+                    activeButton === "KanbanView" ? filterInactive : kanbanView
+                  }
+                  alt="kanbanView"
+                />
                 Kanban View
               </button>
               <div className="relative">
                 <button
-                  className={`${activeButton === 'Filter' ? 'bg-[#7234D7] text-white' : 'border border-[#B3B3B3]'
+                  className={`${activeButton === "Filter"
+                      ? "bg-[#7234D7] text-white"
+                      : "border border-[#B3B3B3]"
                     } xl:px-4 xl:py-2 md:py-4 px-2 py-4 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm`}
-                  onClick={() => handleButtonClick('Filter')}
+                  onClick={() => handleButtonClick("Filter")}
                 >
-                  <img src={activeButton === 'Filter' ? filterInactive : filter} alt="filter" />
+                  <img
+                    src={activeButton === "Filter" ? filterInactive : filter}
+                    alt="filter"
+                  />
                   Filter
                 </button>
 
                 {showDropdown && (
                   <div className="absolute top-full mt-2 right-0 bg-white shadow-lg rounded-md w-[200px] p-4 z-10">
                     <div className="mb-4">
-                      <label className="block text-sm font-medium mb-1">Status</label>
+                      <label className="block text-sm font-medium mb-1">
+                        Status
+                      </label>
                       <select className="w-full border border-gray-300 rounded-lg p-2">
                         <option value="in-progress">In Progress</option>
                         <option value="completed">Completed</option>
@@ -101,7 +125,9 @@ const Tasks = () => {
                       </select>
                     </div>
                     <div className="mb-4">
-                      <label className="block text-sm font-medium mb-1">Priority</label>
+                      <label className="block text-sm font-medium mb-1">
+                        Priority
+                      </label>
                       <select className="w-full border border-gray-300 rounded-lg p-2">
                         <option value="high">High</option>
                         <option value="medium">Medium</option>
@@ -127,8 +153,21 @@ const Tasks = () => {
               <table className="min-w-full table-auto divide-y divide-gray-200">
                 <thead className="bg-[#F4F7F9] rounded-xl">
                   <tr>
-                    {['Id', 'Task Name', 'Task Owner', 'Task Description', 'Status', 'Assigned To', 'Priority', 'Attachment', 'Deadline'].map((header) => (
-                      <th key={header} className="py-2 px-4 text-center text-sm font-medium tracking-wider">
+                    {[
+                      "Id",
+                      "Task Name",
+                      "Task Owner",
+                      "Task Description",
+                      "Status",
+                      "Assigned To",
+                      "Priority",
+                      "Attachment",
+                      "Deadline",
+                    ].map((header) => (
+                      <th
+                        key={header}
+                        className="py-2 px-4 text-center text-sm font-medium tracking-wider"
+                      >
                         {header}
                       </th>
                     ))}
@@ -136,15 +175,22 @@ const Tasks = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {[...Array(10)].map((_, idx) => (
-                    <tr key={idx} className={idx % 2 !== 0 ? 'bg-gray-100' : ''}>
+                    <tr
+                      key={idx}
+                      className={idx % 2 !== 0 ? "bg-gray-100" : ""}
+                    >
                       <td className="px-6 py-4 text-center">01</td>
                       <td className="px-6 py-4 text-center">Facebook</td>
                       <td className="px-6 py-4 text-center">Daniel</td>
                       <td className="px-6 py-4 text-center">Lorem..</td>
-                      <td className="px-6 py-4 text-center text-[#165E3D]">Completed</td>
+                      <td className="px-6 py-4 text-center text-[#165E3D]">
+                        Completed
+                      </td>
                       <td className="px-6 py-4 text-center">Jawad</td>
                       <td className="px-6 py-4 text-center">Normal</td>
-                      <td className="px-6 py-4 text-center text-[#7234D7]">Download</td>
+                      <td className="px-6 py-4 text-center text-[#7234D7]">
+                        Download
+                      </td>
                       <td className="px-6 py-4 text-center">09.10.24</td>
                     </tr>
                   ))}

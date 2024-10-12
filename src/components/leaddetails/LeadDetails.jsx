@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import searchIcon from "../../assets/search.svg";
 import listView from "../../assets/listView.svg";
 import kanbanView from "../../assets/kanbanView.svg";
@@ -8,7 +8,7 @@ import filter from "../../assets/filter.svg";
 import filterDropdown from "../../assets/filter-dropdown.svg";
 import calender from "../../assets/calender.svg";
 import editIcon from "../../assets/edit-icon.svg";
-import Loader from '../../components/loader/Loader';
+import Loader from "../../components/loader/Loader";
 
 const LeadDetails = () => {
   const location = useLocation();
@@ -17,72 +17,72 @@ const LeadDetails = () => {
 
   const [newFields, setNewFields] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [newFieldLabel, setNewFieldLabel] = useState('');
+  const [newFieldLabel, setNewFieldLabel] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const fileInputRef = useRef(null);
   const [editingCell, setEditingCell] = useState({ row: null, column: null });
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(
     [...Array(24)].map((_, idx) => ({
-      id: String(idx + 1).padStart(2, '0'),
-      room: '001',
-      width: '001',
-      height: '001',
-      type: '',
-      panel: 'OX',
-      quantity: '001',
-      price: '180',
-      additionalLabor: '-----',
-      notes: 'notes',
-      totalLabor: '001',
+      id: String(idx + 1).padStart(2, "0"),
+      room: "001",
+      width: "001",
+      height: "001",
+      type: "",
+      panel: "OX",
+      quantity: "001",
+      price: "180",
+      additionalLabor: "-----",
+      notes: "notes",
+      totalLabor: "001",
     }))
   );
 
   const [updatedLead, setUpdatedLead] = useState({
-    leadName: lead?.leadName || '',
-    leadOwner: lead?.leadOwner || '',
-    leadEmail: lead?.leadEmail || '',
-    leadPhone: lead?.leadPhone || '',
-    leadCompany: lead?.leadCompany || '',
-    leadDesc: lead?.leadDesc || '',
-    leadCity: lead?.leadCity || '',
-    leadResidentialType: lead?.leadResidentialType || '',
-    createdDate: lead?.createdDate || '',
-    meetingTitle: lead?.meetingTitle || '',
-    dealOwner: lead?.dealOwner || '',
-    meetingTo: '',
-    meetingFrom: '',
+    leadName: lead?.leadName || "",
+    leadOwner: lead?.leadOwner || "",
+    leadEmail: lead?.leadEmail || "",
+    leadPhone: lead?.leadPhone || "",
+    leadCompany: lead?.leadCompany || "",
+    leadDesc: lead?.leadDesc || "",
+    leadCity: lead?.leadCity || "",
+    leadResidentialType: lead?.leadResidentialType || "",
+    createdDate: lead?.createdDate || "",
+    meetingTitle: lead?.meetingTitle || "",
+    dealOwner: lead?.dealOwner || "",
+    meetingTo: "",
+    meetingFrom: "",
   });
 
   const [formData, setFormData] = useState({
-    customTerms: '',
-    customTermsNotes: '',
-    termsSelection: '',
-    typeOfStructure: '',
-    constructionTypes: '',
-    municipality: '',
-    contractTotal: '',
-    engineeringNeeded: '',
-    engineeringCost: '',
-    engineeringFees: '',
-    commissionableAmount: '',
-    permit: '',
-    laborCost: '',
-    creditCardFees: '',
-    creditCardAmount: '',
-    materialAmount: '',
-    shutters: '',
-    shutterCost: '',
-    materialTax: '',
-    caulkingAndScrews: '',
-    commissionPercentage: '',
-    scaffold: '',
-    commissionAmount: '',
-    miscellaneous: '',
-    profitPercentage: '',
-    water: '',
-    jobProfit: '',
-    financing: ''
+    customTerms: "",
+    customTermsNotes: "",
+    termsSelection: "",
+    typeOfStructure: "",
+    constructionTypes: "",
+    municipality: "",
+    contractTotal: "",
+    engineeringNeeded: "",
+    engineeringCost: "",
+    engineeringFees: "",
+    commissionableAmount: "",
+    permit: "",
+    laborCost: "",
+    creditCardFees: "",
+    creditCardAmount: "",
+    materialAmount: "",
+    shutters: "",
+    shutterCost: "",
+    materialTax: "",
+    caulkingAndScrews: "",
+    commissionPercentage: "",
+    scaffold: "",
+    commissionAmount: "",
+    miscellaneous: "",
+    profitPercentage: "",
+    water: "",
+    jobProfit: "",
+    financing: "",
   });
 
   if (!lead) {
@@ -98,25 +98,37 @@ const LeadDetails = () => {
   };
 
   const handleSave = () => {
-    console.log('Updated Lead:', updatedLead);
+    console.log("Updated Lead:", updatedLead);
     navigate(-1, { state: { updatedLead } });
   };
 
-  const headers = ['Id', 'Room', 'Width', 'Height', 'Type', 'Panel', 'Quantity', 'Price', 'Additional Labor', 'Notes', 'Total Labor'];
+  const headers = [
+    "Id",
+    "Room",
+    "Width",
+    "Height",
+    "Type",
+    "Panel",
+    "Quantity",
+    "Price",
+    "Additional Labor",
+    "Notes",
+    "Total Labor",
+  ];
 
   const typeOptions = [
-    ' ',
-    'ES-EL100 - Single Hung',
-    'ES-EL200 - HORIZONTAL ROLLER',
-    'ES-EL200 - HORIZONTAL ROLLER XOX',
-    'ES-EL400 - SLIDING GLASS DOOR',
-    'ES-EL300 - SWING DOOR - SINGLE LEAF',
-    'ES-EL300 - SWING DOOR - DOUBLE LEAF',
-    'ES-EL150 SHAPE - FIXED WINDOW',
-    'MULLION',
-    'ES-EL300 - SWING DOOR - SINGLE LEAF with Side Lite',
-    'ES-EL300 - SWING DOOR - DOUBLE LEAF with side Lite',
-    'ES-EL300 - SWING DOOR - DOUBLE LEAF with 2 Side Lites',
+    " ",
+    "ES-EL100 - Single Hung",
+    "ES-EL200 - HORIZONTAL ROLLER",
+    "ES-EL200 - HORIZONTAL ROLLER XOX",
+    "ES-EL400 - SLIDING GLASS DOOR",
+    "ES-EL300 - SWING DOOR - SINGLE LEAF",
+    "ES-EL300 - SWING DOOR - DOUBLE LEAF",
+    "ES-EL150 SHAPE - FIXED WINDOW",
+    "MULLION",
+    "ES-EL300 - SWING DOOR - SINGLE LEAF with Side Lite",
+    "ES-EL300 - SWING DOOR - DOUBLE LEAF with side Lite",
+    "ES-EL300 - SWING DOOR - DOUBLE LEAF with 2 Side Lites",
   ];
 
   const handleUploadClick = () => {
@@ -127,28 +139,28 @@ const LeadDetails = () => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const formData = new FormData();
-      formData.append('file', selectedFile);
+      formData.append("file", selectedFile);
 
       setLoading(true);
       try {
         const response = await axios.post(
-          'https://job-calculator-dan-01-hwa8c4czf7c6h5ec.westus-01.azurewebsites.net/uploadfile/',
+          "https://job-calculator-dan-01-hwa8c4czf7c6h5ec.westus-01.azurewebsites.net/uploadfile/",
           formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
+              "Content-Type": "multipart/form-data",
             },
           }
         );
 
         const extractedData = response.data;
-        console.log('Extracted Data:', extractedData);
+        console.log("Extracted Data:", extractedData);
         if (extractedData) {
           const updatedData = extractedData.map((item, idx) => ({
-            id: String(idx + 1).padStart(2, '0'),
+            id: String(idx + 1).padStart(2, "0"),
             ...item,
-            notes: item.notes || '0',
-            totalLabor: item.totalLabor || '0',
+            notes: item.notes || "0",
+            totalLabor: item.totalLabor || "0",
           }));
 
           const totalRows = 24;
@@ -156,17 +168,17 @@ const LeadDetails = () => {
 
           if (remainingRows > 0) {
             const defaultRows = [...Array(remainingRows)].map((_, idx) => ({
-              id: String(updatedData.length + idx + 1).padStart(2, '0'),
-              room: '001',
-              width: '001',
-              height: '001',
-              type: '',
-              panel: 'OX',
-              quantity: '001',
-              price: '180',
-              additionalLabor: '-----',
-              notes: 'notes',
-              totalLabor: '001',
+              id: String(updatedData.length + idx + 1).padStart(2, "0"),
+              room: "001",
+              width: "001",
+              height: "001",
+              type: "",
+              panel: "OX",
+              quantity: "001",
+              price: "180",
+              additionalLabor: "-----",
+              notes: "notes",
+              totalLabor: "001",
             }));
 
             setData([...updatedData, ...defaultRows]);
@@ -175,7 +187,7 @@ const LeadDetails = () => {
           }
         }
       } catch (error) {
-        console.error('Error uploading file:', error);
+        console.error("Error uploading file:", error);
       } finally {
         setLoading(false);
       }
@@ -187,7 +199,7 @@ const LeadDetails = () => {
   };
 
   const handleCellClick = (rowIdx, column) => {
-    if (column !== 'id') {
+    if (column !== "id") {
       setEditingCell({ row: rowIdx, column });
     }
   };
@@ -208,17 +220,20 @@ const LeadDetails = () => {
 
   const handleConfirmAddField = () => {
     if (newFieldLabel) {
-      setNewFields((prevFields) => [...prevFields, { label: newFieldLabel, value: '' }]);
-      setNewFieldLabel('');
+      setNewFields((prevFields) => [
+        ...prevFields,
+        { label: newFieldLabel, value: "" },
+      ]);
+      setNewFieldLabel("");
     }
     setShowModal(false);
   };
 
   return (
-    // <div className="max-w-screen-md mx-auto p-6 rounded lg:mt-0 mt-4 bg-white xl:w-full lg:w-[700px] md:w-[460px] w-72">
     <div className="w-full p-6 rounded lg:mt-0 mt-4 mx-2 bg-white xl:w-full lg:w-full md:w-[650px]">
-
-      <h1 className="text-2xl font-semibold text-center mb-6">Lead Details - {updatedLead.leadName}</h1>
+      <h1 className="text-2xl font-semibold text-center mb-6">
+        Lead Details - {updatedLead.leadName}
+      </h1>
 
       <div className="grid grid-cols-2 gap-6">
         <div className="flex flex-col gap-2">
@@ -301,7 +316,9 @@ const LeadDetails = () => {
             onChange={handleInputChange}
             className="border p-2 rounded"
           >
-            <option value="" disabled>-None-</option>
+            <option value="" disabled>
+              -None-
+            </option>
             <option value="Apartment">Apartment</option>
             <option value="House">House</option>
             <option value="Condominium">Condominium</option>
@@ -320,7 +337,9 @@ const LeadDetails = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <h2 className="xl:text-4xl md:text-2xl text-lg font-semibold">Initial Appointment Meeting Schedule</h2>
+          <h2 className="xl:text-4xl md:text-2xl text-lg font-semibold">
+            Initial Appointment Meeting Schedule
+          </h2>
         </div>
         <div className="flex flex-col gap-2">
           <label className="font-semibold">Meeting Title</label>
@@ -367,7 +386,6 @@ const LeadDetails = () => {
         </div>
       </div>
 
-
       <div className="flex min-h-screen xl:w-full lg:w-[850px] md:w-[650px] w-80 p-0 mt-4">
         <div className="flex-1 p-6 bg-gray-50 overflow-auto pt-0">
           <div className="flex lg:flex-row flex-col justify-between items-center mb-6">
@@ -398,12 +416,12 @@ const LeadDetails = () => {
                 type="file"
                 ref={fileInputRef}
                 onChange={handleFileChange}
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
               />
             </div>
           </div>
 
-          <div className='bg-white shadow-md rounded-lg p-4'>
+          <div className="bg-white shadow-md rounded-lg p-4">
             <div className="flex xl:flex-row flex-col md:gap-3 gap-2 justify-between items-center mb-6">
               <div className="flex items-center space-x-4">
                 <div className="flex items-center">
@@ -413,22 +431,28 @@ const LeadDetails = () => {
                     <option value="50">50</option>
                     <option value="100">100</option>
                   </select>
-                  <span className="lg:ml-2 lg:mr-4  text-[#666666]">Entities</span>
+                  <span className="lg:ml-2 lg:mr-4  text-[#666666]">
+                    Entities
+                  </span>
                 </div>
               </div>
-              <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2'>
+              <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
                 <button className="bg-[#7234D7] border border-[#666666] text-white xl:px-4 xl:py-2 px-2 py-1 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm">
-                  <img src={listView} alt='listView' />List View
+                  <img src={listView} alt="listView" />
+                  List View
                 </button>
                 <button className="border border-[#B3B3B3] px-4 py-2 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm">
-                  <img src={kanbanView} alt='kanbanView' />Kanban View
+                  <img src={kanbanView} alt="kanbanView" />
+                  Kanban View
                 </button>
                 <button className="border border-[#B3B3B3] px-4 py-2 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm">
-                  <img src={filter} alt='filter' />Filter
+                  <img src={filter} alt="filter" />
+                  Filter
                 </button>
                 <button className="border border-[#B3B3B3] px-4 py-2 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm">
-                  <img src={calender} alt='calendar' />September 2024
-                  <img src={filterDropdown} alt='filterDropdown' />
+                  <img src={calender} alt="calendar" />
+                  September 2024
+                  <img src={filterDropdown} alt="filterDropdown" />
                 </button>
               </div>
             </div>
@@ -443,7 +467,10 @@ const LeadDetails = () => {
                       <thead className="bg-[#F4F7F9] rounded-xl">
                         <tr>
                           {headers.map((header) => (
-                            <th key={header} className="py-2 px-4 text-center text-sm font-medium tracking-wider">
+                            <th
+                              key={header}
+                              className="py-2 px-4 text-center text-sm font-medium tracking-wider"
+                            >
                               {header}
                             </th>
                           ))}
@@ -451,34 +478,56 @@ const LeadDetails = () => {
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
                         {data.map((row, rowIdx) => (
-                          <tr key={rowIdx} className={rowIdx % 2 !== 0 ? 'bg-gray-100' : ''}>
+                          <tr
+                            key={rowIdx}
+                            className={rowIdx % 2 !== 0 ? "bg-gray-100" : ""}
+                          >
                             {Object.keys(row).map((column, colIdx) => (
-                              <td key={colIdx} className="px-3 py-4 whitespace-nowrap" onClick={() => handleCellClick(rowIdx, column)}>
-                                {column === 'type' ? (
+                              <td
+                                key={colIdx}
+                                className="px-3 py-4 whitespace-nowrap"
+                                onClick={() => handleCellClick(rowIdx, column)}
+                              >
+                                {column === "type" ? (
                                   <select
-                                    value={typeOptions.includes(row[column]) ? row[column] : ' '}
-                                    onChange={(e) => handleInputChangee(e, rowIdx, column)}
+                                    value={
+                                      typeOptions.includes(row[column])
+                                        ? row[column]
+                                        : " "
+                                    }
+                                    onChange={(e) =>
+                                      handleInputChangee(e, rowIdx, column)
+                                    }
                                     className="form-select px-4 py-2 rounded-md w-64 border border-gray-300"
                                   >
                                     {typeOptions.map((option, idx) => (
                                       <option key={idx} value={option}>
-                                        {option.length > 20 ? `${option.slice(0, 20)}...` : option}
+                                        {option.length > 20
+                                          ? `${option.slice(0, 20)}...`
+                                          : option}
                                       </option>
                                     ))}
                                   </select>
-                                ) : column === 'id' ? (
+                                ) : column === "id" ? (
                                   <span>{row[column]}</span>
-                                ) : editingCell.row === rowIdx && editingCell.column === column ? (
+                                ) : editingCell.row === rowIdx &&
+                                  editingCell.column === column ? (
                                   <input
                                     type="text"
                                     value={row[column]}
-                                    onChange={(e) => handleInputChangee(e, rowIdx, column)}
+                                    onChange={(e) =>
+                                      handleInputChangee(e, rowIdx, column)
+                                    }
                                     onBlur={handleBlur}
                                     autoFocus
                                     className="px-2 py-1 w-16 border border-gray-300 rounded"
                                   />
+                                ) : row[column]?.length > 20 ? (
+                                  `${row[column].slice(0, 20)}...`
+                                ) : row[column] === "" ? (
+                                  "0"
                                 ) : (
-                                  row[column]?.length > 20 ? `${row[column].slice(0, 20)}...` : (row[column] === '' ? '0' : row[column])
+                                  row[column]
                                 )}
                               </td>
                             ))}
@@ -495,57 +544,97 @@ const LeadDetails = () => {
           <div className="bg-white overflow-x-auto shadow-md rounded-lg p-4 mt-4">
             <div className="grid xl:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-2 mt-3 p-4">
               <div className="xl:col-span-2 lg:col-span-2 col-span-1 border-b pb-4">
-                {['Custom Terms', 'Custom Terms Notes', 'Terms Selection'].map((label, idx) => (
-                  <div key={idx} className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
-                    <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{label}</label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        placeholder="Enter value"
-                        value={formData[label.toLowerCase()] || ''}
-                        onChange={(e) => setFormData({ ...formData, [label.toLowerCase()]: e.target.value })}
-                        className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
-                      />
-                    ) : (
-                      <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                        {formData[label.toLowerCase()] || 'Enter Value'}
-                      </span>
-                    )}
-                  </div>
-                ))}
+                {["Custom Terms", "Custom Terms Notes", "Terms Selection"].map(
+                  (label, idx) => (
+                    <div
+                      key={idx}
+                      className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2"
+                    >
+                      <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                        {label}
+                      </label>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          placeholder="Enter value"
+                          value={formData[label.toLowerCase()] || ""}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              [label.toLowerCase()]: e.target.value,
+                            })
+                          }
+                          className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                        />
+                      ) : (
+                        <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                          {formData[label.toLowerCase()] || "Enter Value"}
+                        </span>
+                      )}
+                    </div>
+                  )
+                )}
               </div>
 
               {[
-                'Deposit', 'Material Delivery', 'Material Delivery Payment 2', 'Final Payment',
-                'Contract Total', 'Labor Cost', 'Material Amount', 'Shutter Cost', 'Credit Card Fees Amount',
-                'Engineering Cost', 'Profit Percentage', 'Commissionable Amount', 'Commission Amount'
+                "Deposit",
+                "Material Delivery",
+                "Material Delivery Payment 2",
+                "Final Payment",
+                "Contract Total",
+                "Labor Cost",
+                "Material Amount",
+                "Shutter Cost",
+                "Credit Card Fees Amount",
+                "Engineering Cost",
+                "Profit Percentage",
+                "Commissionable Amount",
+                "Commission Amount",
               ].map((label, idx) => (
-                <div key={idx} className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
-                  <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{label}</label>
+                <div
+                  key={idx}
+                  className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2"
+                >
+                  <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                    {label}
+                  </label>
                   {isEditing ? (
                     <div className="flex-1 flex items-center gap-2">
                       <input
                         type="text"
                         placeholder="Enter percentage"
-                        value={formData[`${label.toLowerCase()}Percentage`] || ''}
-                        onChange={(e) => setFormData({ ...formData, [`${label.toLowerCase()}Percentage`]: e.target.value })}
+                        value={
+                          formData[`${label.toLowerCase()}Percentage`] || ""
+                        }
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            [`${label.toLowerCase()}Percentage`]:
+                              e.target.value,
+                          })
+                        }
                         className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-1/3"
                       />
                       <input
                         type="text"
                         placeholder="Enter amount"
-                        value={formData[`${label.toLowerCase()}Amount`] || ''}
-                        onChange={(e) => setFormData({ ...formData, [`${label.toLowerCase()}Amount`]: e.target.value })}
+                        value={formData[`${label.toLowerCase()}Amount`] || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            [`${label.toLowerCase()}Amount`]: e.target.value,
+                          })
+                        }
                         className="border border-gray-300 rounded-lg py-2 px-4 mt-1 flex-1"
                       />
                     </div>
                   ) : (
                     <div className="flex-1 flex items-center gap-2">
                       <span className="w-1/3 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                        {formData[`${label.toLowerCase()}Percentage`] || '0%'}
+                        {formData[`${label.toLowerCase()}Percentage`] || "0%"}
                       </span>
                       <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                        {formData[`${label.toLowerCase()}Amount`] || '$0.00'}
+                        {formData[`${label.toLowerCase()}Amount`] || "$0.00"}
                       </span>
                     </div>
                   )}
@@ -553,22 +642,41 @@ const LeadDetails = () => {
               ))}
 
               {[
-                'Type Of Structure', 'Construction Types', 'Municipality', 'Engineering Needed', 'Permit', 'Shutters',
-                'Caulking and Screws', 'Scaffold', 'Miscellaneous', 'Water', 'Job Profit'
+                "Type Of Structure",
+                "Construction Types",
+                "Municipality",
+                "Engineering Needed",
+                "Permit",
+                "Shutters",
+                "Caulking and Screws",
+                "Scaffold",
+                "Miscellaneous",
+                "Water",
+                "Job Profit",
               ].map((label, idx) => (
-                <div key={idx} className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
-                  <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{label}</label>
+                <div
+                  key={idx}
+                  className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2"
+                >
+                  <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                    {label}
+                  </label>
                   {isEditing ? (
                     <input
                       type="text"
                       placeholder="Enter value"
-                      value={formData[label.toLowerCase()] || ''}
-                      onChange={(e) => setFormData({ ...formData, [label.toLowerCase()]: e.target.value })}
+                      value={formData[label.toLowerCase()] || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          [label.toLowerCase()]: e.target.value,
+                        })
+                      }
                       className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
                     />
                   ) : (
                     <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                      {formData[label.toLowerCase()] || 'Enter Value'}
+                      {formData[label.toLowerCase()] || "Enter Value"}
                     </span>
                   )}
                 </div>
@@ -576,11 +684,15 @@ const LeadDetails = () => {
             </div>
 
             <div className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
-              <label className="w-44 text-sm text-gray-700 capitalize font-semibold">Finance</label>
+              <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                Finance
+              </label>
               {isEditing ? (
                 <select
-                  value={formData['finance'] || ''}
-                  onChange={(e) => setFormData({ ...formData, finance: e.target.value })}
+                  value={formData["finance"] || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, finance: e.target.value })
+                  }
                   className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
                 >
                   <option value="">Select</option>
@@ -590,7 +702,7 @@ const LeadDetails = () => {
                 </select>
               ) : (
                 <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                  {formData['finance'] || 'Select Finance'}
+                  {formData["finance"] || "Select Finance"}
                 </span>
               )}
 
@@ -600,13 +712,22 @@ const LeadDetails = () => {
                     <input
                       type="text"
                       placeholder="Amount"
-                      value={formData['finance_amount'] || ''}
-                      onChange={(e) => setFormData({ ...formData, finance_amount: e.target.value })}
+                      value={formData["finance_amount"] || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          finance_amount: e.target.value,
+                        })
+                      }
                       className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-full"
                     />
                   ) : (
                     <span className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-full text-gray-700">
-                      {formData['finance_amount'] ? `$${parseFloat(formData['finance_amount']).toFixed(2)}` : '$0.00'}
+                      {formData["finance_amount"]
+                        ? `$${parseFloat(formData["finance_amount"]).toFixed(
+                          2
+                        )}`
+                        : "$0.00"}
                     </span>
                   )}
                 </div>
@@ -616,18 +737,24 @@ const LeadDetails = () => {
                     <input
                       type="text"
                       placeholder="Percentage"
-                      value={formData['finance_percentage'] || ''}
-                      onChange={(e) => setFormData({ ...formData, finance_percentage: e.target.value })}
+                      value={formData["finance_percentage"] || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          finance_percentage: e.target.value,
+                        })
+                      }
                       className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-full"
                     />
                   ) : (
                     <span className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-full text-gray-700">
-                      {formData['finance_percentage'] ? `${formData['finance_percentage']}%` : '0%'}
+                      {formData["finance_percentage"]
+                        ? `${formData["finance_percentage"]}%`
+                        : "0%"}
                     </span>
                   )}
                 </div>
               </div>
-
             </div>
 
             <div className="flex items-center gap-4 mt-5">
