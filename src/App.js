@@ -15,6 +15,8 @@ import Chatbot from './components/chatbot/ChatBot.jsx';
 import Commissions from './pages/commissions/Commissions.jsx';
 import AddCommission from './components/addcommission/AddCommission.jsx';
 import EditCommission from './components/editcommission/EditCommission.jsx';
+import SignIn from './pages/signin/Signin.jsx';
+import SignUp from './pages/signup/Signup.jsx';
 
 function App() {
   return (
@@ -42,6 +44,8 @@ function App() {
               <Route path="/financials/commissions" element={<Commissions />} />
               <Route path="/addcommissions" element={<AddCommission />} />
               <Route path="/commissions/:id" element={<EditCommission />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
             </Routes>
           </div>
         </div>
