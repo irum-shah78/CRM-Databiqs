@@ -22,16 +22,16 @@ const Sidebar = () => {
   const menuItems = [
     { name: "Dashboard", icon: dashboardIcon, link: "/dashboard" },
     { name: "Lead Management", icon: leadManagementIcon, link: "/leadmanagement" },
-    // {
-    //   name: "Deal Management",
-    //   icon: dealManagementIcon,
-    //   link: "/dealmanagement",
-    //   subMenu: [
-    //     { name: "Deal Management", link: "/dealmanagement" },
-    //     { name: "Job Calculator", link: "/jobcalculator" },
-    //   ]
-    // },
-    { name: "Deal Management", icon: dealManagementIcon, link: "/dealmanagement" },
+    {
+      name: "Deal Management",
+      icon: dealManagementIcon,
+      link: "/dealmanagement",
+      subMenu: [
+        { name: "Deal Management", link: "/dealmanagement" },
+        { name: "Job Calculator", link: "/jobcalculator" },
+      ]
+    },
+    // { name: "Deal Management", icon: dealManagementIcon, link: "/dealmanagement" },
     { name: "Appointments & Calendar", icon: appointmentsIcon, link: "/appointments-calendar" },
     {
       name: "Tasks & Follow-ups", icon: tasksIcon, link: "/tasks",

@@ -8,7 +8,7 @@ import calender from "../../assets/calender.svg";
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
-const LeadManagment = (currentUser) => {
+const LeadManagment = ({currentUser}) => {
   // const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,7 +58,7 @@ const LeadManagment = (currentUser) => {
 
 
   const handleSaveLead = async () => {
-    const email = currentUser ? currentUser.email : '';
+    const email = currentUser?.email || '';
     console.log("Current user email:", email);
     if (!email) {
       console.error("Email is required.");
