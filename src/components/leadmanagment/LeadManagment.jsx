@@ -6,8 +6,10 @@ import filter from "../../assets/filter.svg";
 import filterDropdown from "../../assets/filter-dropdown.svg";
 import calender from "../../assets/calender.svg";
 import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
-const LeadManagment = () => {
+const LeadManagment = (currentUser) => {
+  // const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
   const { updatedLead } = location.state || {};
@@ -39,24 +41,65 @@ const LeadManagment = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSaveLead = () => {
-    setLeads([...leads, { ...formData, id: leads.length + 1 }]);
-    setFormData({
-      leadName: '',
-      leadOwner: '',
-      leadStage: '',
-      createdDate: '',
-      appointdate: '',
-      leadAdd: '',
-      leadDesc: '',
-      leadSource: ''
-    });
-    setIsModalOpen(false);
-  };
-
-  // const handleRowClick = (leadId) => {
-  //   navigate(`/lead/${leadId}`);
+  // const handleSaveLead = () => {
+  //   setLeads([...leads, { ...formData, id: leads.length + 1 }]);
+  //   setFormData({
+  //     leadName: '',
+  //     leadOwner: '',
+  //     leadStage: '',
+  //     createdDate: '',
+  //     appointdate: '',
+  //     leadAdd: '',
+  //     leadDesc: '',
+  //     leadSource: ''
+  //   });
+  //   setIsModalOpen(false);
   // };
+
+
+  const handleSaveLead = async () => {
+    const email = currentUser ? currentUser.email : '';
+    console.log("Current user email:", email);
+    if (!email) {
+      console.error("Email is required.");
+      return;
+    }
+
+    try {
+      console.log(`Sending request to: http://localhost:8000/users/${email}/leads/`);
+      const response = await axios.post(`http://localhost:8000/users/${email}/leads/`, {
+        first_name: formData.leadName.split(' ')[0],
+        last_name: formData.leadName.split(' ')[1] || '',
+        lead_name: formData.leadName,
+        lead_stage: formData.leadStage,
+        lead_owner: formData.leadOwner,
+        appointment_date: formData.appointdate,
+        lead_address: formData.leadAdd,
+        action: '',
+        company: '', 
+        phone: '', 
+        city: '',
+        residential_type: '', 
+        meeting_title: '',
+        deal_owner: '',
+        to_date: '', 
+        from_date: '',
+      });
+
+      setLeads([...leads, response.data]);
+      setFormData({
+        leadName: '',
+        leadOwner: '',
+        leadStage: '',
+        appointdate: '',
+        leadAdd: '',
+        leadDesc: ''
+      });
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error saving lead:", error);
+    }
+  };
 
   const handleRowClick = (lead) => {
     navigate(`/lead/${lead.id}`, { state: { lead } });

@@ -102,24 +102,19 @@
 
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import logo from "../../assets/logo.svg";
 import profileImage from "../../assets/profile-img.svg";
 import notification from "../../assets/notification.svg";
 import profileDropdown from "../../assets/profile-dropdown.svg";
 import { useNavigate } from 'react-router-dom';
 
-const Header = ({ user, setUser }) => {
+const Header = ({ user }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleClick = () => {
     navigate('/');
-  };
-
-  const handleSignOut = () => {
-    setUser(null);
-    navigate('/signin');
   };
 
   const toggleMenu = () => {
@@ -157,7 +152,7 @@ const Header = ({ user, setUser }) => {
             </button>
           </div>
 
-          {user ? (
+          {user ? ( 
             <div className="hidden md:flex items-center">
               <img
                 src={profileImage}
@@ -171,13 +166,9 @@ const Header = ({ user, setUser }) => {
                   <img src={profileDropdown} alt="dropdown" className="w-2 h-2" />
                 </div>
               </div>
-              <button className="ml-4" onClick={handleSignOut}>
-                Sign Out
-              </button>
             </div>
           ) : (
             <div className="flex space-x-4">
-              <button onClick={() => navigate('/signin')} className="text-[#4508A8]">Sign In</button>
               <button onClick={() => navigate('/signup')} className="text-[#4508A8]">Sign Up</button>
             </div>
           )}
@@ -212,9 +203,6 @@ const Header = ({ user, setUser }) => {
                     <img src={profileDropdown} alt="dropdown" className="w-2 h-2" />
                   </div>
                 </div>
-                <button className="ml-4" onClick={handleSignOut}>
-                  Sign Out
-                </button>
               </div>
             ) : (
               <div className="flex space-x-4">

@@ -1,4 +1,5 @@
 import './App.css';
+import { useState } from 'react';
 import Header from './components/header/Header';
 import JobCalculator from './pages/jobcalculator/JobCalculator';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
@@ -19,22 +20,31 @@ import SignIn from './pages/signin/Signin.jsx';
 import SignUp from './pages/signup/Signup.jsx';
 
 function App() {
+  const [currentUser, setCurrentUser] = useState(null);
+  const handleUserSignIn = (userData) => {
+    setCurrentUser(userData);
+  };
+
+  // const handleUserSignOut = () => {
+  //   setCurrentUser(null);
+  // };
+
   return (
     <>
       <Router>
-        <Header />
+        <Header user={currentUser} />
         <div className="flex">
           <div className="">
             <Sidebar />
           </div>
 
-          <div className="flex-1 p-4 ">
+          <div className="flex-1 p-4">
             <Chatbot />
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" />} />
-              <Route path="/dashboard" element={<Dashboard/>} />
+              <Route path="/dashboard" element={<Dashboard currentUser={currentUser} />} />
               <Route path="/jobcalculator" element={<JobCalculator />} />
-              <Route path="/leadmanagement" element={<LeadManagment />} />
+              <Route path="/leadmanagement" element={<LeadManagment currentUser={currentUser} />} />
               <Route path="/dealmanagement" element={<DealManagment />} />
               <Route path="/lead/:id" element={<LeadDetails />} />
               <Route path="/jobcalcdetails" element={<JobCalculatorDetails />} />
@@ -44,7 +54,7 @@ function App() {
               <Route path="/financials/commissions" element={<Commissions />} />
               <Route path="/addcommissions" element={<AddCommission />} />
               <Route path="/commissions/:id" element={<EditCommission />} />
-              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signin" element={<SignIn setUser={handleUserSignIn} />} />
               <Route path="/signup" element={<SignUp />} />
             </Routes>
           </div>
