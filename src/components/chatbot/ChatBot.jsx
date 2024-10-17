@@ -19,15 +19,24 @@ const Chatbot = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!question.trim()) return;
-
+  
     setChatHistory((prev) => [...prev, { type: 'user', text: question }]);
     setLoading(true);
-
+  
     try {
       const result = await axios.post(
-        `https://chatbot-backend-fastapi-g0fyfwctdehedjay.westus-01.azurewebsites.net/query?question=${question}`
+        'https://chatbot-backend-fastapi-g0fyfwctdehedjay.westus-01.azurewebsites.net/query',
+        {
+          question: question 
+        },
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
       );
-      console.log(result.data);
+  
       setChatHistory((prev) => [...prev, { type: 'bot', text: result.data.answer }]);
       setError('');
     } catch (err) {
