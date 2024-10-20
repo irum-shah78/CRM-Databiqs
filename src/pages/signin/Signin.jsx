@@ -34,7 +34,7 @@
 
 //         if (idToken) {
 //           console.log("Google id_token:", idToken);
-          
+
 //           const response = await axios.post("http://localhost:8000/auth/google", {
 //             token: idToken,
 //           });
@@ -92,7 +92,6 @@
 // };
 
 // export default SignIn;
-
 
 import React, { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
@@ -163,16 +162,19 @@ const SignIn = ({ setUser }) => {
     onSuccess: async (tokenResponse) => {
       try {
         console.log("Google Login Token Response:", tokenResponse);
-  
+
         const idToken = tokenResponse.id_token; // This is the correct id_token
-  
+
         if (idToken) {
           console.log("Google id_token:", idToken);
-  
-          const response = await axios.post("http://localhost:8000/auth/google", {
-            token: idToken,
-          });
-  
+
+          const response = await axios.post(
+            "http://localhost:8000/auth/google",
+            {
+              token: idToken,
+            }
+          );
+
           console.log("Backend Response:", response.data);
           setUser(response.data.user);
           navigate("/");
@@ -192,7 +194,7 @@ const SignIn = ({ setUser }) => {
     },
     scope: "openid profile email",
   });
-  
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
