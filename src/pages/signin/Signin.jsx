@@ -163,7 +163,7 @@ const SignIn = ({ setUser }) => {
       try {
         console.log("Google Login Token Response:", tokenResponse);
 
-        const idToken = tokenResponse.id_token; // This is the correct id_token
+        const idToken = tokenResponse.id_token;
 
         if (idToken) {
           console.log("Google id_token:", idToken);
