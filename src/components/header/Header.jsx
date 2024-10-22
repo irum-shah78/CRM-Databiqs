@@ -134,7 +134,7 @@ const Header = ({ user }) => {
 
   return (
     <>
-      <header className="flex items-center justify-between px-8 h-[80px] bg-white shadow-md lg:w-full md:w-full w-[400px] z-50">
+      <header className="flex items-center justify-between px-8 h-[80px] bg-white shadow-md w-full z-50">
         <div className="flex items-center cursor-pointer" onClick={handleClick}>
           <img src={logo} alt="Logo" className="w-8 h-8" />
           <span className="ml-2 text-xl font-bold text-[#4508A8]">Crystalyze</span>

@@ -23,7 +23,7 @@ const Tasks = () => {
 
   const navigate = useNavigate();
   const handleJobCalcClick = () => {
-    navigate("/addcommissions");
+    navigate("/addtask");
   };
 
   return (

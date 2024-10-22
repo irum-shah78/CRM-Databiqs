@@ -26,10 +26,7 @@ import SignUp from "./pages/signup/Signup.jsx";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
-  // const handleUserSignIn = (userData) => {
-  //   setCurrentUser(userData);
-  // };
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const handleUserSignIn = (userData) => {
     setCurrentUser({ email: userData.email, ...userData });
   };
@@ -43,11 +40,17 @@ function App() {
       <Router>
         <Header user={currentUser} />
         <div className="flex">
-          <div className="">
-            <Sidebar />
-          </div>
+          {/* <Sidebar /> */}
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
 
-          <div className="flex-1 p-4">
+          <div
+            className={`flex-1 p-4 transition-all duration-300 ease-in-out ${
+              isSidebarOpen ? "xl:ml-52 lg:ml-48 md:ml-44 ml-2" : "ml-0"
+            }`}
+          >
             <Chatbot />
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" />} />
