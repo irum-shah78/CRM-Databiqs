@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const LeadDetails = () => {
   const location = useLocation();
@@ -34,10 +35,45 @@ const LeadDetails = () => {
     });
   };
 
-  const handleSave = () => {
-    console.log("Updated Lead:", updatedLead);
-    navigate(-1, { state: { updatedLead } });
+  // const handleSave = async () => {
+  //   try {
+  //     const leadId = lead.id;
+  //     await axios.put(`http://localhost:8000/leads/${leadId}/details/`, {
+  //       company: updatedLead.leadCompany,
+  //       phone: updatedLead.leadPhone,
+  //       city: updatedLead.leadCity,
+  //       residential_type: updatedLead.leadResidentialType,
+  //       meeting_title: updatedLead.meetingTitle,
+  //       deal_owner: updatedLead.dealOwner,
+  //       to_date: updatedLead.meetingTo,
+  //       from_date: updatedLead.meetingFrom,
+  //     });
+  //     navigate(-1);
+  //   } catch (error) {
+  //     console.error("Error updating lead:", error);
+  //   }
+  // };
+
+  const handleSave = async () => {
+    try {
+      const leadId = lead.id;
+      const response = await axios.put(`http://localhost:8000/leads/${leadId}/details/`, {
+        company: updatedLead.leadCompany,
+        phone: updatedLead.leadPhone,
+        city: updatedLead.leadCity,
+        residential_type: updatedLead.leadResidentialType,
+        meeting_title: updatedLead.meetingTitle,
+        deal_owner: updatedLead.dealOwner,
+        to_date: updatedLead.meetingTo,
+        from_date: updatedLead.meetingFrom,
+      });
+  
+      navigate(-1, { state: { updatedLead: response.data } });
+    } catch (error) {
+      console.error("Error updating lead:", error);
+    }
   };
+  
 
   return (
     <div className="w-full p-6 rounded lg:mt-0 mt-4 mx-2 bg-white xl:w-full lg:w-full md:w-[650px]">
