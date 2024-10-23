@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import axios from 'axios';
+import React, { useRef, useState } from "react";
+import axios from "axios";
 import searchIcon from "../../assets/search.svg";
 import listView from "../../assets/listView.svg";
 import kanbanView from "../../assets/kanbanView.svg";
@@ -7,47 +7,63 @@ import filter from "../../assets/filter.svg";
 import filterDropdown from "../../assets/filter-dropdown.svg";
 import calender from "../../assets/calender.svg";
 import editIcon from "../../assets/edit-icon.svg";
-import Loader from '../../components/loader/Loader';
+import Loader from "../../components/loader/Loader";
 
 const JobCalculator = () => {
   const [newFields, setNewFields] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [newFieldLabel, setNewFieldLabel] = useState('');
+  const [newFieldLabel, setNewFieldLabel] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const fileInputRef = useRef(null);
   const [editingCell, setEditingCell] = useState({ row: null, column: null });
   const [loading, setLoading] = useState(false);
+
+  const [payments, setPayments] = useState([]);
+  const [paymentPercentages, setPaymentPercentages] = useState([]);
+
   const [data, setData] = useState(
     [...Array(24)].map((_, idx) => ({
-      id: String(idx + 1).padStart(2, '0'),
-      room: '001',
-      width: '001',
-      height: '001',
-      type: '',
-      panel: 'OX',
-      quantity: '001',
-      price: '180',
-      additionalLabor: '-----',
-      notes: 'notes',
-      totalLabor: '001',
+      id: String(idx + 1).padStart(2, "0"),
+      room: "001",
+      width: "001",
+      height: "001",
+      type: "",
+      panel: "OX",
+      quantity: "001",
+      price: "180",
+      additionalLabor: "-----",
+      notes: "notes",
+      totalLabor: "001",
     }))
   );
 
-  const headers = ['Id', 'Room', 'Width', 'Height', 'Type', 'Panel', 'Quantity', 'Price', 'Additional Labor', 'Notes', 'Total Labor'];
+  const headers = [
+    "Id",
+    "Room",
+    "Width",
+    "Height",
+    "Type",
+    "Panel",
+    "Quantity",
+    "Price",
+    "Additional Labor",
+    "Notes",
+    "Total Labor",
+  ];
 
   const typeOptions = [
-    ' ',
-    'ES-EL100 - Single Hung',
-    'ES-EL200 - HORIZONTAL ROLLER',
-    'ES-EL200 - HORIZONTAL ROLLER XOX',
-    'ES-EL400 - SLIDING GLASS DOOR',
-    'ES-EL300 - SWING DOOR - SINGLE LEAF',
-    'ES-EL300 - SWING DOOR - DOUBLE LEAF',
-    'ES-EL150 SHAPE - FIXED WINDOW',
-    'MULLION',
-    'ES-EL300 - SWING DOOR - SINGLE LEAF with Side Lite',
-    'ES-EL300 - SWING DOOR - DOUBLE LEAF with side Lite',
-    'ES-EL300 - SWING DOOR - DOUBLE LEAF with 2 Side Lites',
+    " ",
+    "ES-EL100 - Single Hung",
+    "ES-EL200 - HORIZONTAL ROLLER",
+    "ES-EL200 - HORIZONTAL ROLLER XOX",
+    "ES-EL400 - SLIDING GLASS DOOR",
+    "ES-EL300 - SWING DOOR - SINGLE LEAF",
+    "ES-EL300 - SWING DOOR - DOUBLE LEAF",
+    "ES-EL150 SHAPE - FIXED WINDOW",
+    "MULLION",
+    "ES-EL300 - SWING DOOR - SINGLE LEAF with Side Lite",
+    "ES-EL300 - SWING DOOR - DOUBLE LEAF with side Lite",
+    "ES-EL300 - SWING DOOR - DOUBLE LEAF with 2 Side Lites",
   ];
 
   const handleUploadClick = () => {
@@ -58,28 +74,28 @@ const JobCalculator = () => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const formData = new FormData();
-      formData.append('file', selectedFile);
+      formData.append("file", selectedFile);
 
       setLoading(true);
       try {
         const response = await axios.post(
-          'https://job-calculator-dan-01-hwa8c4czf7c6h5ec.westus-01.azurewebsites.net/uploadfile/',
+          "https://job-calculator-dan-01-hwa8c4czf7c6h5ec.westus-01.azurewebsites.net/uploadfile/",
           formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
+              "Content-Type": "multipart/form-data",
             },
           }
         );
 
         const extractedData = response.data;
-        console.log('Extracted Data:', extractedData);
+        console.log("Extracted Data:", extractedData);
         if (extractedData) {
           const updatedData = extractedData.map((item, idx) => ({
-            id: String(idx + 1).padStart(2, '0'),
+            id: String(idx + 1).padStart(2, "0"),
             ...item,
-            notes: item.notes || '0',
-            totalLabor: item.totalLabor || '0',
+            notes: item.notes || "0",
+            totalLabor: item.totalLabor || "0",
           }));
 
           const totalRows = 24;
@@ -87,17 +103,17 @@ const JobCalculator = () => {
 
           if (remainingRows > 0) {
             const defaultRows = [...Array(remainingRows)].map((_, idx) => ({
-              id: String(updatedData.length + idx + 1).padStart(2, '0'),
-              room: '001',
-              width: '001',
-              height: '001',
-              type: '',
-              panel: 'OX',
-              quantity: '001',
-              price: '180',
-              additionalLabor: '-----',
-              notes: 'notes',
-              totalLabor: '001',
+              id: String(updatedData.length + idx + 1).padStart(2, "0"),
+              room: "001",
+              width: "001",
+              height: "001",
+              type: "",
+              panel: "OX",
+              quantity: "001",
+              price: "180",
+              additionalLabor: "-----",
+              notes: "notes",
+              totalLabor: "001",
             }));
 
             setData([...updatedData, ...defaultRows]);
@@ -106,7 +122,7 @@ const JobCalculator = () => {
           }
         }
       } catch (error) {
-        console.error('Error uploading file:', error);
+        console.error("Error uploading file:", error);
       } finally {
         setLoading(false);
       }
@@ -114,34 +130,34 @@ const JobCalculator = () => {
   };
 
   const [formData, setFormData] = useState({
-    customTerms: '',
-    customTermsNotes: '',
-    termsSelection: '',
-    typeOfStructure: '',
-    constructionTypes: '',
-    municipality: '',
-    contractTotal: '',
-    engineeringNeeded: '',
-    engineeringCost: '',
-    engineeringFees: '',
-    commissionableAmount: '',
-    permit: '',
-    laborCost: '',
-    creditCardFees: '',
-    creditCardAmount: '',
-    materialAmount: '',
-    shutters: '',
-    shutterCost: '',
-    materialTax: '',
-    caulkingAndScrews: '',
-    commissionPercentage: '',
-    scaffold: '',
-    commissionAmount: '',
-    miscellaneous: '',
-    profitPercentage: '',
-    water: '',
-    jobProfit: '',
-    financing: ''
+    customTerms: "",
+    customTermsNotes: "",
+    termsSelection: "",
+    typeOfStructure: "",
+    constructionTypes: "",
+    municipality: "",
+    contractTotal: "",
+    engineeringNeeded: "",
+    engineeringCost: "",
+    engineeringFees: "",
+    commissionableAmount: "",
+    permit: "",
+    laborCost: "",
+    creditCardFees: "",
+    creditCardAmount: "",
+    materialAmount: "",
+    shutters: "",
+    shutterCost: "",
+    materialTax: "",
+    caulkingAndScrews: "",
+    commissionPercentage: "",
+    scaffold: "",
+    commissionAmount: "",
+    miscellaneous: "",
+    profitPercentage: "",
+    water: "",
+    jobProfit: "",
+    financing: "",
   });
 
   const handleSaveChange = () => {
@@ -149,7 +165,7 @@ const JobCalculator = () => {
   };
 
   const handleCellClick = (rowIdx, column) => {
-    if (column !== 'id') {
+    if (column !== "id") {
       setEditingCell({ row: rowIdx, column });
     }
   };
@@ -170,8 +186,11 @@ const JobCalculator = () => {
 
   const handleConfirmAddField = () => {
     if (newFieldLabel) {
-      setNewFields((prevFields) => [...prevFields, { label: newFieldLabel, value: '' }]);
-      setNewFieldLabel('');
+      setNewFields((prevFields) => [
+        ...prevFields,
+        { label: newFieldLabel, value: "" },
+      ]);
+      setNewFieldLabel("");
     }
     setShowModal(false);
   };
@@ -207,12 +226,12 @@ const JobCalculator = () => {
               type="file"
               ref={fileInputRef}
               onChange={handleFileChange}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
             />
           </div>
         </div>
 
-        <div className='bg-white shadow-md rounded-lg p-4'>
+        <div className="bg-white shadow-md rounded-lg p-4">
           <div className="flex xl:flex-row flex-col md:gap-3 gap-2 justify-between items-center mb-6">
             <div className="flex items-center space-x-4">
               <div className="flex items-center">
@@ -222,22 +241,28 @@ const JobCalculator = () => {
                   <option value="50">50</option>
                   <option value="100">100</option>
                 </select>
-                <span className="lg:ml-2 lg:mr-4  text-[#666666]">Entities</span>
+                <span className="lg:ml-2 lg:mr-4  text-[#666666]">
+                  Entities
+                </span>
               </div>
             </div>
-            <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2'>
+            <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
               <button className="bg-[#7234D7] border border-[#666666] text-white xl:px-4 xl:py-2 px-2 py-1 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm">
-                <img src={listView} alt='listView' />List View
+                <img src={listView} alt="listView" />
+                List View
               </button>
               <button className="border border-[#B3B3B3] px-4 py-2 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm">
-                <img src={kanbanView} alt='kanbanView' />Kanban View
+                <img src={kanbanView} alt="kanbanView" />
+                Kanban View
               </button>
               <button className="border border-[#B3B3B3] px-4 py-2 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm">
-                <img src={filter} alt='filter' />Filter
+                <img src={filter} alt="filter" />
+                Filter
               </button>
               <button className="border border-[#B3B3B3] px-4 py-2 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm">
-                <img src={calender} alt='calendar' />September 2024
-                <img src={filterDropdown} alt='filterDropdown' />
+                <img src={calender} alt="calendar" />
+                September 2024
+                <img src={filterDropdown} alt="filterDropdown" />
               </button>
             </div>
           </div>
@@ -252,7 +277,10 @@ const JobCalculator = () => {
                     <thead className="bg-[#F4F7F9] rounded-xl">
                       <tr>
                         {headers.map((header) => (
-                          <th key={header} className="py-2 px-4 text-center text-sm font-medium tracking-wider">
+                          <th
+                            key={header}
+                            className="py-2 px-4 text-center text-sm font-medium tracking-wider"
+                          >
                             {header}
                           </th>
                         ))}
@@ -260,34 +288,56 @@ const JobCalculator = () => {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {data.map((row, rowIdx) => (
-                        <tr key={rowIdx} className={rowIdx % 2 !== 0 ? 'bg-gray-100' : ''}>
+                        <tr
+                          key={rowIdx}
+                          className={rowIdx % 2 !== 0 ? "bg-gray-100" : ""}
+                        >
                           {Object.keys(row).map((column, colIdx) => (
-                            <td key={colIdx} className="px-3 py-4 whitespace-nowrap" onClick={() => handleCellClick(rowIdx, column)}>
-                              {column === 'type' ? (
+                            <td
+                              key={colIdx}
+                              className="px-3 py-4 whitespace-nowrap"
+                              onClick={() => handleCellClick(rowIdx, column)}
+                            >
+                              {column === "type" ? (
                                 <select
-                                  value={typeOptions.includes(row[column]) ? row[column] : ' '}
-                                  onChange={(e) => handleInputChangee(e, rowIdx, column)}
+                                  value={
+                                    typeOptions.includes(row[column])
+                                      ? row[column]
+                                      : " "
+                                  }
+                                  onChange={(e) =>
+                                    handleInputChangee(e, rowIdx, column)
+                                  }
                                   className="form-select px-4 py-2 rounded-md w-64 border border-gray-300"
                                 >
                                   {typeOptions.map((option, idx) => (
                                     <option key={idx} value={option}>
-                                      {option.length > 20 ? `${option.slice(0, 20)}...` : option}
+                                      {option.length > 20
+                                        ? `${option.slice(0, 20)}...`
+                                        : option}
                                     </option>
                                   ))}
                                 </select>
-                              ) : column === 'id' ? (
+                              ) : column === "id" ? (
                                 <span>{row[column]}</span>
-                              ) : editingCell.row === rowIdx && editingCell.column === column ? (
+                              ) : editingCell.row === rowIdx &&
+                                editingCell.column === column ? (
                                 <input
                                   type="text"
                                   value={row[column]}
-                                  onChange={(e) => handleInputChangee(e, rowIdx, column)}
+                                  onChange={(e) =>
+                                    handleInputChangee(e, rowIdx, column)
+                                  }
                                   onBlur={handleBlur}
                                   autoFocus
                                   className="px-2 py-1 w-16 border border-gray-300 rounded"
                                 />
+                              ) : row[column]?.length > 20 ? (
+                                `${row[column].slice(0, 20)}...`
+                              ) : row[column] === "" ? (
+                                "0"
                               ) : (
-                                row[column]?.length > 20 ? `${row[column].slice(0, 20)}...` : (row[column] === '' ? '0' : row[column])
+                                row[column]
                               )}
                             </td>
                           ))}
@@ -301,60 +351,432 @@ const JobCalculator = () => {
           )}
         </div>
 
-        <div className="bg-white overflow-x-auto shadow-md rounded-lg p-4 mt-4">
-          <div className="grid xl:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-2 mt-3 p-4">
-            <div className="xl:col-span-2 lg:col-span-2 col-span-1 border-b pb-4">
-              {['Custom Terms', 'Custom Terms Notes', 'Terms Selection'].map((label, idx) => (
-                <div key={idx} className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
-                  <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{label}</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      placeholder="Enter value"
-                      value={formData[label.toLowerCase()] || ''}
-                      onChange={(e) => setFormData({ ...formData, [label.toLowerCase()]: e.target.value })}
-                      className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
-                    />
-                  ) : (
-                    <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                      {formData[label.toLowerCase()] || 'Enter Value'}
-                    </span>
+        <div className="grid xl:grid-cols-2 lg:grid-cols-2 grid-cols-1 border-b pb-4 mt-4 bg-white shadow-sm p-4 rounded-lg">
+          {["Custom Terms Notes"].map((label, idx) => (
+            <div
+              key={idx}
+              className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2"
+            >
+              <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                {label}
+              </label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  placeholder="Enter value"
+                  value={formData[label.toLowerCase()] || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      [label.toLowerCase()]: e.target.value,
+                    })
+                  }
+                  className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                />
+              ) : (
+                <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                  {formData[label.toLowerCase()] || "Enter Value"}
+                </span>
+              )}
+            </div>
+          ))}
+          <div className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
+            <label className="w-44 text-sm text-gray-700 capitalize font-semibold ms-4">
+              Term Selection
+            </label>
+            {isEditing ? (
+              <select
+                name="termSelection"
+                value={formData["termSelection"] || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, termSelection: e.target.value })
+                }
+                className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+              >
+                <option value="" disabled>
+                  Select a term
+                </option>
+                <option value="50/45/5">50/45/5</option>
+                <option value="Custom">Custom Payment</option>
+                <option value="Financing">Financing</option>
+              </select>
+            ) : (
+              <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                {formData["termSelection"] || "Select a term"}
+              </span>
+            )}
+          </div>
+
+          {formData.termSelection === "50/45/5" && (
+            <div className="flex flex-col gap-2 mt-2">
+              <div className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
+                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                  Deposit Payment (50%)
+                </label>
+                <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                  50%
+                </span>
+              </div>
+              <div className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
+                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                  Delivery Payment (45%)
+                </label>
+                <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                  45%
+                </span>
+              </div>
+              <div className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
+                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                  Final Payment (5%)
+                </label>
+                <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                  5%
+                </span>
+              </div>
+            </div>
+          )}
+
+          {formData.termSelection === "Custom" && (
+            <div className="flex flex-col gap-2 mt-2">
+              <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                Custom Payment
+              </label>
+              <select
+                name="customPayment"
+                value={formData["customPayment"] || ""}
+                onChange={(e) => {
+                  const numberOfPayments = parseInt(e.target.value, 10);
+                  setFormData({ ...formData, customPayment: numberOfPayments });
+                  setPaymentPercentages(Array(numberOfPayments).fill(0));
+                }}
+                className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+              >
+                <option value="" disabled>
+                  Select a number
+                </option>
+                {[1, 2, 3, 4, 5, 6].map((num) => (
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
+                ))}
+              </select>
+
+              {formData.customPayment && (
+                <div className="flex flex-col gap-2 mt-4">
+                  <label className="text-sm text-gray-700 font-semibold">
+                    Enter Payment Percentages for {formData.customPayment}{" "}
+                    Payments
+                  </label>
+
+                  {paymentPercentages.map((percentage, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <label className="text-sm text-gray-700">
+                        Payment {idx + 1}:
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        value={percentage}
+                        onChange={(e) => {
+                          const newPercentages = [...paymentPercentages];
+                          newPercentages[idx] =
+                            parseInt(e.target.value, 10) || 0;
+                          setPaymentPercentages(newPercentages);
+                        }}
+                        className="border border-gray-300 rounded-lg py-2 px-4 w-20"
+                        placeholder={`Enter percentage for Payment ${idx + 1}`}
+                      />
+                      <span>%</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {paymentPercentages.reduce((a, b) => a + b, 0) !== 100 && (
+                <p className="text-red-500 text-sm mt-2">
+                  The total percentage must equal 100%.
+                </p>
+              )}
+
+              {formData.customPayment && (
+                <div className="flex flex-col gap-2 mt-2">
+                  <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                    Payment Type
+                  </label>
+                  <select
+                    name="paymentType"
+                    value={formData["paymentType"] || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, paymentType: e.target.value })
+                    }
+                    className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                  >
+                    <option value="" disabled>
+                      Select payment type
+                    </option>
+                    <option value="Cash">Cash</option>
+                    <option value="Cash + Financing">Cash + Financing</option>
+                  </select>
+
+                  {formData.paymentType === "Cash + Financing" && (
+                    <div className="flex flex-col gap-2 mt-2">
+                      <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                        Select Financing Provider
+                      </label>
+                      <select
+                        name="financingProvider"
+                        value={formData["financingProvider"] || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            financingProvider: e.target.value,
+                            providerTerms: "",
+                          })
+                        }
+                        className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                      >
+                        <option value="" disabled>
+                          Select provider
+                        </option>
+                        <option value="Wells Fargo">Wells Fargo</option>
+                        <option value="Synchrony">Synchrony</option>
+                      </select>
+
+                      {formData.financingProvider && (
+                        <div className="flex flex-col gap-2 mt-2">
+                          <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                            {formData.financingProvider} Terms
+                          </label>
+                          <select
+                            name="providerTerms"
+                            value={formData["providerTerms"] || ""}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                providerTerms: e.target.value,
+                              })
+                            }
+                            className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                          >
+                            <option value="" disabled>
+                              Select terms
+                            </option>
+
+                            {formData.financingProvider === "Wells Fargo" && (
+                              <>
+                                <option value="Plan">Plan</option>
+                                <option value="Special Rate with Custom Monthly Payments">
+                                  Special Rate with Custom Monthly Payments
+                                </option>
+                                <option value="Discount Rate2">
+                                  Discount Rate
+                                </option>
+                              </>
+                            )}
+
+                            {formData.financingProvider === "Synchrony" && (
+                              <>
+                                <option value="Plan">Plan</option>
+                                <option value="Promotional Offer">
+                                  Promotional Offer
+                                </option>
+                                <option value="Monthly Payment Factor">
+                                  Monthly Payment Factor
+                                </option>
+                                <option value="Est. # of Payments">
+                                  Est. # of Payments
+                                </option>
+                                <option value="Merchant Fee">
+                                  Merchant Fee
+                                </option>
+                              </>
+                            )}
+                          </select>
+                          {formData.providerTerms && (
+                            <div className="flex flex-col gap-2 mt-4">
+                              <label className="text-sm text-gray-700 font-semibold">
+                                Payment Details for {formData.providerTerms}
+                              </label>
+
+                              <div className="flex flex-col gap-2">
+                                <label className="text-sm text-gray-700">
+                                  Name of Payment
+                                </label>
+                                <input
+                                  type="text"
+                                  value={formData.providerTerms}
+                                  disabled
+                                  className="border border-gray-300 rounded-lg py-2 px-4"
+                                />
+                                <label className="text-sm text-gray-700">
+                                  Percentage
+                                </label>
+                                <input
+                                  type="number"
+                                  placeholder="Enter percentage"
+                                  value={formData.percentage || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      percentage: e.target.value,
+                                    })
+                                  }
+                                  className="border border-gray-300 rounded-lg py-2 px-4"
+                                />
+                                <label className="text-sm text-gray-700">
+                                  Payment Amount
+                                </label>
+                                <input
+                                  type="number"
+                                  placeholder="Enter payment amount"
+                                  value={formData.paymentAmount || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      paymentAmount: e.target.value,
+                                    })
+                                  }
+                                  className="border border-gray-300 rounded-lg py-2 px-4"
+                                />
+                                <label className="text-sm text-gray-700">
+                                  Form of Payment
+                                </label>
+                                <select
+                                  value={formData.formOfPayment || ""}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      formOfPayment: e.target.value,
+                                    })
+                                  }
+                                  className="border border-gray-300 rounded-lg py-2 px-4"
+                                >
+                                  <option value="" disabled>
+                                    Select form of payment
+                                  </option>
+                                  <option value="Cash">Cash</option>
+                                  <option value="Credit Card">
+                                    Credit Card
+                                  </option>
+                                  <option value="Financing">Financing</option>
+                                </select>
+
+                                <button
+                                  className="mt-4 bg-[#7234D7] text-white py-2 px-4 rounded-lg"
+                                  onClick={() => {
+                                    const newPayment = {
+                                      name: formData.providerTerms,
+                                      percentage: formData.percentage,
+                                      amount: formData.paymentAmount,
+                                      formOfPayment: formData.formOfPayment,
+                                    };
+                                    setPayments([...payments, newPayment]);
+                                    setFormData({
+                                      ...formData,
+                                      providerTerms: "",
+                                      percentage: "",
+                                      paymentAmount: "",
+                                      formOfPayment: "",
+                                    });
+                                  }}
+                                >
+                                  Save Payment
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {payments.length > 0 && (
+                        <div className="mt-4">
+                          {payments.map((payment, idx) => (
+                            <div
+                              key={idx}
+                              className="border border-gray-300 rounded-lg p-4 mt-2"
+                            >
+                              <p>
+                                <strong>Payment Name:</strong> {payment.name}
+                              </p>
+                              <p>
+                                <strong>Percentage:</strong>{" "}
+                                {payment.percentage}%
+                              </p>
+                              <p>
+                                <strong>Payment Amount:</strong> $
+                                {payment.amount}
+                              </p>
+                              <p>
+                                <strong>Form of Payment:</strong>{" "}
+                                {payment.formOfPayment}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
-              ))}
+              )}
             </div>
+          )}
+        </div>
 
+        <div className="bg-white overflow-x-auto shadow-md rounded-lg p-4 mt-4">
+          <div className="grid xl:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-2 mt-3 p-4">
             {[
-              'Deposit', 'Material Delivery', 'Material Delivery Payment 2', 'Final Payment',
-              'Contract Total', 'Labor Cost', 'Material Amount', 'Shutter Cost', 'Credit Card Fees Amount',
-              'Engineering Cost', 'Profit Percentage', 'Commissionable Amount', 'Commission Amount'
+              "Labor Cost",
+              "Contract Total",
+              "Material Amount",
+              "Shutter Cost",
+              "Credit Card Fees Amount",
+              "Engineering Cost",
+              "Profit Percentage",
+              "Commissionable Amount",
+              "Commission Amount",
             ].map((label, idx) => (
-              <div key={idx} className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
-                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{label}</label>
+              <div
+                key={idx}
+                className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2"
+              >
+                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                  {label}
+                </label>
                 {isEditing ? (
                   <div className="flex-1 flex items-center gap-2">
                     <input
                       type="text"
                       placeholder="Enter percentage"
-                      value={formData[`${label.toLowerCase()}Percentage`] || ''}
-                      onChange={(e) => setFormData({ ...formData, [`${label.toLowerCase()}Percentage`]: e.target.value })}
+                      value={formData[`${label.toLowerCase()}Percentage`] || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          [`${label.toLowerCase()}Percentage`]: e.target.value,
+                        })
+                      }
                       className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-1/3"
                     />
                     <input
                       type="text"
                       placeholder="Enter amount"
-                      value={formData[`${label.toLowerCase()}Amount`] || ''}
-                      onChange={(e) => setFormData({ ...formData, [`${label.toLowerCase()}Amount`]: e.target.value })}
+                      value={formData[`${label.toLowerCase()}Amount`] || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          [`${label.toLowerCase()}Amount`]: e.target.value,
+                        })
+                      }
                       className="border border-gray-300 rounded-lg py-2 px-4 mt-1 flex-1"
                     />
                   </div>
                 ) : (
                   <div className="flex-1 flex items-center gap-2">
                     <span className="w-1/3 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                      {formData[`${label.toLowerCase()}Percentage`] || '0%'}
+                      {formData[`${label.toLowerCase()}Percentage`] || "0%"}
                     </span>
                     <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                      {formData[`${label.toLowerCase()}Amount`] || '$0.00'}
+                      {formData[`${label.toLowerCase()}Amount`] || "$0.00"}
                     </span>
                   </div>
                 )}
@@ -362,22 +784,40 @@ const JobCalculator = () => {
             ))}
 
             {[
-              'Type Of Structure', 'Construction Types', 'Municipality', 'Engineering Needed', 'Permit', 'Shutters',
-              'Caulking and Screws', 'Scaffold', 'Miscellaneous', 'Water', 'Job Profit'
+              "Type Of Structure",
+              "Construction Types",
+              "Municipality",
+              "Engineering Needed",
+              "Permit",
+              "Shutters",
+              "Caulking and Screws",
+              "Scaffold",
+              "Miscellaneous",
+              "Job Profit",
             ].map((label, idx) => (
-              <div key={idx} className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
-                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">{label}</label>
+              <div
+                key={idx}
+                className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2"
+              >
+                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                  {label}
+                </label>
                 {isEditing ? (
                   <input
                     type="text"
                     placeholder="Enter value"
-                    value={formData[label.toLowerCase()] || ''}
-                    onChange={(e) => setFormData({ ...formData, [label.toLowerCase()]: e.target.value })}
+                    value={formData[label.toLowerCase()] || ""}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        [label.toLowerCase()]: e.target.value,
+                      })
+                    }
                     className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
                   />
                 ) : (
                   <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                    {formData[label.toLowerCase()] || 'Enter Value'}
+                    {formData[label.toLowerCase()] || "Enter Value"}
                   </span>
                 )}
               </div>
@@ -385,11 +825,15 @@ const JobCalculator = () => {
           </div>
 
           <div className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2">
-            <label className="w-44 text-sm text-gray-700 capitalize font-semibold">Finance</label>
+            <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+              Finance
+            </label>
             {isEditing ? (
               <select
-                value={formData['finance'] || ''}
-                onChange={(e) => setFormData({ ...formData, finance: e.target.value })}
+                value={formData["finance"] || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, finance: e.target.value })
+                }
                 className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
               >
                 <option value="">Select</option>
@@ -399,7 +843,7 @@ const JobCalculator = () => {
               </select>
             ) : (
               <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                {formData['finance'] || 'Select Finance'}
+                {formData["finance"] || "Select Finance"}
               </span>
             )}
 
@@ -409,13 +853,20 @@ const JobCalculator = () => {
                   <input
                     type="text"
                     placeholder="Amount"
-                    value={formData['finance_amount'] || ''}
-                    onChange={(e) => setFormData({ ...formData, finance_amount: e.target.value })}
+                    value={formData["finance_amount"] || ""}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        finance_amount: e.target.value,
+                      })
+                    }
                     className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-full"
                   />
                 ) : (
                   <span className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-full text-gray-700">
-                    {formData['finance_amount'] ? `$${parseFloat(formData['finance_amount']).toFixed(2)}` : '$0.00'}
+                    {formData["finance_amount"]
+                      ? `$${parseFloat(formData["finance_amount"]).toFixed(2)}`
+                      : "$0.00"}
                   </span>
                 )}
               </div>
@@ -425,18 +876,24 @@ const JobCalculator = () => {
                   <input
                     type="text"
                     placeholder="Percentage"
-                    value={formData['finance_percentage'] || ''}
-                    onChange={(e) => setFormData({ ...formData, finance_percentage: e.target.value })}
+                    value={formData["finance_percentage"] || ""}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        finance_percentage: e.target.value,
+                      })
+                    }
                     className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-full"
                   />
                 ) : (
                   <span className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-full text-gray-700">
-                    {formData['finance_percentage'] ? `${formData['finance_percentage']}%` : '0%'}
+                    {formData["finance_percentage"]
+                      ? `${formData["finance_percentage"]}%`
+                      : "0%"}
                   </span>
                 )}
               </div>
             </div>
-
           </div>
 
           <div className="flex items-center gap-4 mt-5">

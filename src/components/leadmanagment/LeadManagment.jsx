@@ -30,7 +30,30 @@ const LeadManagement = ({ currentUser }) => {
     leadDesc: "",
   });
 
+  // useEffect(() => {
+  //   if (updatedLead) {
+  //     setLeads((prevLeads) =>
+  //       prevLeads.map((lead) =>
+  //         lead.id === updatedLead.id ? updatedLead : lead
+  //       )
+  //     );
+  //   }
+  // }, [updatedLead]);
+
   useEffect(() => {
+    const fetchLeads = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/users/${currentUser.email}/leads/`
+        );
+        setLeads(response.data);
+      } catch (error) {
+        console.error("Error fetching leads:", error);
+      }
+    };
+
+    fetchLeads();
+
     if (updatedLead) {
       setLeads((prevLeads) =>
         prevLeads.map((lead) =>
@@ -38,7 +61,7 @@ const LeadManagement = ({ currentUser }) => {
         )
       );
     }
-  }, [updatedLead]);
+  }, [currentUser.email, updatedLead]);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

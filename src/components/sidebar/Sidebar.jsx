@@ -155,7 +155,6 @@ import tasksIcon from "../../assets/tasks.svg";
 import financialIcon from "../../assets/financial.svg";
 import jobSubmissionIcon from "../../assets/job-submission.svg";
 import projectManagementIcon from "../../assets/project-mgmt.svg";
-import permitIcon from "../../assets/permit.svg";
 import itemsIcon from "../../assets/items.svg";
 import channelIcon from "../../assets/omni-channel.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -173,6 +172,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
   const menuItems = [
     { name: "Dashboard", icon: dashboardIcon, link: "/dashboard" },
+    { name: "Customers", icon: leadManagementIcon, link: "/customers" },
     {
       name: "Lead Management",
       icon: leadManagementIcon,
@@ -206,15 +206,6 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     { name: "Job Submission", icon: jobSubmissionIcon, link: "/jobs" },
     { name: "Omni Channel", icon: channelIcon, link: "/omni-channel" },
     {
-      name: "Items",
-      icon: itemsIcon,
-      link: "/items",
-      subMenu: [
-        { name: "Permits", link: "/items/permits" },
-        { name: "HOAs", link: "/items/hoas" },
-      ],
-    },
-    {
       name: "Project Management",
       icon: projectManagementIcon,
       link: "/project-management",
@@ -224,9 +215,19 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         { name: "Service", link: "/project-management/service" },
         { name: "Scheduler", link: "/project-management/scheduler" },
         { name: "Daily Logs", link: "/project-management/dailylogs" },
+        { name: "Sub Contractor", link: "/project-management/sub-contractor" },
       ],
     },
-    { name: "Customers", icon: leadManagementIcon, link: "/customers" },
+    {
+      name: "Items",
+      icon: itemsIcon,
+      link: "/items",
+      subMenu: [
+        { name: "Permits", link: "/items/permits" },
+        { name: "HOAs", link: "/items/hoas" },
+        { name: "Engineering", link: "/items/engineering" },
+      ],
+    },
     {
       name: "Financials",
       icon: financialIcon,
@@ -240,7 +241,6 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         { name: "Job Costing", link: "/financials/jobcosting" },
       ],
     },
-    { name: "Permit & HOA Approval", icon: permitIcon, link: "/permit-hoa" },
   ];
 
   useEffect(() => {
