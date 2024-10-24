@@ -169,6 +169,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const location = useLocation();
   const [activeItem, setActiveItem] = useState("");
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
 
   const menuItems = [
     { name: "Dashboard", icon: dashboardIcon, link: "/dashboard" },
@@ -261,11 +262,34 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     setOpenDropdown((prev) => (prev === itemName ? null : itemName));
   };
 
+  useEffect(() => {
+    let lastScrollTop = 0;
+
+    const handleScroll = () => {
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      if (scrollTop > lastScrollTop) {
+        setIsHeaderVisible(false);
+      } else {
+        setIsHeaderVisible(true);
+      }
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div className="relative ps-3 pb-0 pt-3 pe-8">
       {!isSidebarOpen && (
         <button
-          className="fixed top-24 left-2 z-30 text-xl focus:outline-none flex justify-between items-center p-4 bg-white shadow-md"
+          className={`fixed left-2 z-30 text-xl focus:outline-none flex justify-between items-center p-4 bg-white shadow-md transition-all duration-300 ${
+            isHeaderVisible ? "top-24" : "top-2"
+          }`}
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           <FontAwesomeIcon icon={faBars} />
@@ -278,7 +302,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         } transition-transform duration-300 z-10 overflow-y-auto`}
       >
         <button
-          className="absolute top-4 right-4 text-xl focus:outline-none"
+          className="absolute right-4 text-xl focus:outline-none"
           onClick={() => setIsSidebarOpen(false)}
         >
           <FontAwesomeIcon icon={faTimes} />

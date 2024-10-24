@@ -40,7 +40,6 @@ function App() {
       <Router>
         <Header user={currentUser} />
         <div className="flex">
-          {/* <Sidebar /> */}
           <Sidebar
             isSidebarOpen={isSidebarOpen}
             setIsSidebarOpen={setIsSidebarOpen}
