@@ -17,10 +17,10 @@ const LeadManagement = ({ currentUser }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    leadPhone:"",
-    leadCompany:"",
-    leadEmail:"",
-    leadSource:"",
+    leadPhone: "",
+    leadCompany: "",
+    leadEmail: "",
+    leadSource: "",
     leadName: "",
     leadOwner: "",
     leadStage: "",
@@ -87,7 +87,7 @@ const LeadManagement = ({ currentUser }) => {
       lead_desc: formData.leadDesc,
     };
 
-    console.log(leadData); 
+    console.log(leadData);
 
     try {
       const response = await axios.post(
@@ -265,16 +265,16 @@ const LeadManagement = ({ currentUser }) => {
                     />
                   </div>
                   <div>
-                    <label className="font-semibold block mb-1 text-[14px]">Lead Source</label>
+                    <label className="font-semibold block mb-1 text-[14px]">
+                      Lead Source
+                    </label>
                     <select
                       name="leadSource"
                       value={formData.leadSource}
                       onChange={handleInputChange}
                       className="w-full border p-2 rounded border-[#CDCDCD]"
                     >
-                      <option value="">
-                        -None-
-                      </option>
+                      <option value="">-None-</option>
                       <option value="Facebook">Facebook</option>
                       <option value="Google">Google</option>
                     </select>
