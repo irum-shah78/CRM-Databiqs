@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import searchIcon from "../../assets/search.svg";
 import listView from "../../assets/listView.svg";
 import kanbanView from "../../assets/kanbanView.svg";
@@ -41,22 +41,28 @@ const Permit = () => {
                   <option value="50">50</option>
                   <option value="100">100</option>
                 </select>
-                <span className="lg:ml-2 lg:mr-4  text-[#666666]">Entities</span>
+                <span className="lg:ml-2 lg:mr-4  text-[#666666]">
+                  Entities
+                </span>
               </div>
             </div>
-            <div className='flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2'>
+            <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
               <button className="bg-[#7234D7] border border-[#666666] text-white xl:px-4 xl:py-2 px-2 py-1 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm">
-                <img src={listView} alt='listView' />List View
+                <img src={listView} alt="listView" />
+                List View
               </button>
               <button className="border border-[#B3B3B3] px-4 py-2 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm">
-                <img src={kanbanView} alt='kanbanView' />Kanban View
+                <img src={kanbanView} alt="kanbanView" />
+                Kanban View
               </button>
               <button className="border border-[#B3B3B3] px-4 py-2 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm">
-                <img src={filter} alt='filter' />Filter
+                <img src={filter} alt="filter" />
+                Filter
               </button>
               <button className="border border-[#B3B3B3] px-4 py-2 rounded-lg flex items-center justify-center gap-2 xl:text-base text-sm">
-                <img src={calender} alt='calendar' />September 2024
-                <img src={filterDropdown} alt='filterDropdown' />
+                <img src={calender} alt="calendar" />
+                September 2024
+                <img src={filterDropdown} alt="filterDropdown" />
               </button>
             </div>
           </div>
@@ -66,8 +72,19 @@ const Permit = () => {
               <table className="min-w-full table-auto divide-y divide-gray-200">
                 <thead className="bg-[#F4F7F9] rounded-xl">
                   <tr>
-                    {['Id', 'HOA Status', 'HOA Application Track', 'HOA Application', 'Project Name', 'Contract Signed Name', 'HOA Date Submitted'].map((header) => (
-                      <th key={header} className="py-2 px-4 text-center text-sm font-medium tracking-wider">
+                    {[
+                      "Id",
+                      "HOA Status",
+                      "HOA Application Track",
+                      "HOA Application",
+                      "Project Name",
+                      "Contract Signed Name",
+                      "HOA Date Submitted",
+                    ].map((header) => (
+                      <th
+                        key={header}
+                        className="py-2 px-4 text-center text-sm font-medium tracking-wider"
+                      >
                         {header}
                       </th>
                     ))}
@@ -75,7 +92,10 @@ const Permit = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {[...Array(10)].map((_, idx) => (
-                    <tr key={idx} className={idx % 2 !== 0 ? 'bg-gray-100' : ''}>
+                    <tr
+                      key={idx}
+                      className={idx % 2 !== 0 ? "bg-gray-100" : ""}
+                    >
                       <td className="px-6 py-4 text-center">01</td>
                       <td className="px-6 py-4 text-center">Not started</td>
                       <td className="px-6 py-4 text-center">Lorem ipsum..</td>
