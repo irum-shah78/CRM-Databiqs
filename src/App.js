@@ -62,7 +62,7 @@ function App() {
                 path="/leadmanagement"
                 element={<LeadManagment currentUser={currentUser} />}
               />
-              <Route path="/dealmanagement" element={<DealManagment />} />
+              <Route path="/dealmanagement" element={<DealManagment currentUser={currentUser} />} />
               <Route path="/lead/:id" element={<LeadDetails />} />
               <Route
                 path="/jobcalcdetails"
