@@ -239,6 +239,182 @@ const JobCalculator = () => {
     setSavedData(dataToDisplay);
   };
 
+  const wellsFargoPlans = [
+    {
+      plan: "2225",
+      details:
+        "Special rate of 12.90% APR with custom monthly payments of 2.15%",
+      discountRate: "5.74%",
+    },
+    {
+      plan: "1193",
+      details:
+        "Special rate of 9.90% APR with custom monthly payments of 2.00%",
+      discountRate: "6.74%",
+    },
+    {
+      plan: "1157",
+      details:
+        "Special rate of 6.90% APR with custom monthly payments of 2.00%",
+      discountRate: "8.74%",
+    },
+    {
+      plan: "2700",
+      details:
+        "Special rate of 3.90% APR with custom monthly payments of 1.75%",
+      discountRate: "13.74%",
+    },
+    {
+      plan: "2701",
+      details:
+        "Special rate of 5.90% APR with custom monthly payments of 1.75%",
+      discountRate: "9.74%",
+    },
+    {
+      plan: "3702",
+      details:
+        "Special rate of 7.90% APR with custom monthly payments of 1.75%",
+      discountRate: "8.74%",
+    },
+    {
+      plan: "4079",
+      details: "Special rate of 0% APR with 24 equal monthly payments",
+      discountRate: "11.99%",
+    },
+    {
+      plan: "4091",
+      details: "Special rate of 0% APR with 36 equal monthly payments",
+      discountRate: "14.99%",
+    },
+    {
+      plan: "4103",
+      details: "Special rate of 0% APR with 48 equal monthly payments",
+      discountRate: "16.99%",
+    },
+    {
+      plan: "4115",
+      details: "Special rate of 0% APR with 60 equal monthly payments",
+      discountRate: "18.99%",
+    },
+    {
+      plan: "4062",
+      details: "Special rate of 0% APR with 72 equal monthly payments",
+      discountRate: "19.99%",
+    },
+    {
+      plan: "3389",
+      details:
+        "Special rate of 8.99% APR with 24 equal monthly payments (4.6538% payment factor)",
+      discountRate: "4.74%",
+    },
+    {
+      plan: "3390",
+      details:
+        "Special rate of 8.99% APR with 36 equal monthly payments (3.2170% payment factor)",
+      discountRate: "5.74%",
+    },
+    {
+      plan: "3391",
+      details:
+        "Special rate of 8.99% APR with 48 equal monthly payments (2.5090% payment factor)",
+      discountRate: "6.74%",
+    },
+    {
+      plan: "3392",
+      details:
+        "Special rate of 8.99% APR with 60 equal monthly payments (2.0888% payment factor)",
+      discountRate: "7.74%",
+    },
+    {
+      plan: "1148",
+      details:
+        "No interest if paid in full within 6 months with regular monthly payments",
+      discountRate: "4.24%",
+    },
+    {
+      plan: "1181",
+      details:
+        "No interest if paid in full within 9 months with regular monthly payments",
+      discountRate: "5.24%",
+    },
+    {
+      plan: "1019",
+      details:
+        "No interest if paid in full within 12 months with regular monthly payments",
+      discountRate: "6.24%",
+    },
+    {
+      plan: "1047",
+      details:
+        "No interest if paid in full within 15 months with regular monthly payments",
+      discountRate: "6.74%",
+    },
+    {
+      plan: "1066",
+      details:
+        "No interest if paid in full within 18 months with regular monthly payments",
+      discountRate: "7.24%",
+    },
+    { plan: "9999", details: "Regular Account Terms", discountRate: "3.34%" },
+  ];
+
+  const synchronyPlans = [
+    {
+      value: "921",
+      label: "921 No Monthly Interest if Paid in Full within 9 Months 2.50% N/A 6.50%",
+    },
+    {
+      value: "922",
+      label: "922 No Monthly Interest if Paid in Full within 12 Months 2.50% N/A 7.25%",
+    },
+    {
+      value: "923",
+      label: "923 No Monthly Interest if Paid in Full within 15 Months 2.50% N/A 7.70%",
+    },
+    {
+      value: "924",
+      label: "924 No Monthly Interest if Paid in Full within 18 Months 2.50% N/A 8.00%",
+    },
+    {
+      value: "925",
+      label: "925 No Monthly Interest if Paid in Full within 24 Months 2.50% N/A 11.15%",
+    },
+    { value: "940", label: "940 3.99% APR Until Paid in Full 1.25% 94 22.15%" },
+    {
+      value: "941",
+      label: "941 5.99% APR Until Paid in Full 1.25% 102 16.00%",
+    },
+    {
+      value: "942",
+      label: "942 7.99% APR Until Paid in Full 1.25% 115 11.15%",
+    },
+    { value: "943", label: "943 9.99% APR Until Paid in Full 1.25% 132 8.00%" },
+    { value: "950", label: "950 5.99% APR Until Paid in Full 1.50% 82 14.65%" },
+    { value: "951", label: "951 7.99% APR Until Paid in Full 1.50% 88 10.25%" },
+    { value: "952", label: "952 9.99% APR Until Paid in Full 1.50% 98 7.65%" },
+    { value: "960", label: "960 3.99% APR Until Paid in Full 1.75% 64 15.65%" },
+    { value: "961", label: "961 5.99% APR Until Paid in Full 1.75% 68 12.90%" },
+    { value: "962", label: "962 7.99% APR Until Paid in Full 1.75% 73 9.15%" },
+    { value: "963", label: "963 9.99% APR Until Paid in Full 1.75% 78 7.25%" },
+    { value: "964", label: "964 10.99% APR Until Paid in Full 1.75% 82 4.15%" },
+    { value: "965", label: "965 11.99% APR Until Paid in Full 1.75% 86 3.00%" },
+    { value: "970", label: "970 5.99% APR Until Paid in Full 2.00% 58 11.15%" },
+    { value: "971", label: "971 7.99% APR Until Paid in Full 2.00% 61 8.00%" },
+    { value: "972", label: "972 9.99% APR Until Paid in Full 2.00% 65 7.05%" },
+    { value: "980", label: "980 5.99% APR Until Paid in Full 3.00% 37 8.00%" },
+    { value: "981", label: "981 7.99% APR Until Paid in Full 3.00% 38 7.25%" },
+    { value: "982", label: "982 9.99% APR Until Paid in Full 3.00% 40 6.40%" },
+    { value: "990", label: "990 5.99% APR Until Paid in Full 4.00% 27 7.25%" },
+    { value: "991", label: "991 7.99% APR Until Paid in Full 4.00% 28 7.00%" },
+    { value: "992", label: "992 9.99% APR Until Paid in Full 4.00% 28 5.35%" },
+    { value: "930", label: "930 25 Month No Monthly Interest 4.00% 25 11.15%" },
+    { value: "931", label: "931 36 Month No Monthly Interest 2.78% 36 16.00%" },
+    { value: "932", label: "932 48 Month No Monthly Interest 2.08% 48 17.75%" },
+    { value: "933", label: "933 60 Month No Monthly Interest 1.67% 60 20.25%" },
+    { value: "934", label: "934 72 Month No Monthly Interest 1.39% 72 23.75%" },
+  ];
+  
+
   return (
     <div className="flex min-h-screen xl:w-full lg:w-[700px] md:w-[460px] w-80 p-0 lg:mt-0 mt-4">
       <div className="flex-1 p-6 bg-gray-50 overflow-auto pt-0">
@@ -626,27 +802,21 @@ const JobCalculator = () => {
                         </option>
                         {formData.financingProvider === "Wells Fargo" && (
                           <>
-                            <option value="Plan">Plan</option>
-                            <option value="Special Rate with Custom Monthly Payments">
-                              Special Rate with Custom Monthly Payments
-                            </option>
-                            <option value="Discount Rate">Discount Rate</option>
+                            {wellsFargoPlans.map((plan) => (
+                              <option key={plan.plan} value={plan.plan}>
+                                {`${plan.plan} ${plan.details} ${plan.discountRate}`}
+                              </option>
+                            ))}
                           </>
                         )}
 
                         {formData.financingProvider === "Synchrony" && (
                           <>
-                            <option value="Plan">Plan</option>
-                            <option value="Promotional Offer">
-                              Promotional Offer
-                            </option>
-                            <option value="Monthly Payment Factor">
-                              Monthly Payment Factor
-                            </option>
-                            <option value="Est. # of Payments">
-                              Est. # of Payments
-                            </option>
-                            <option value="Merchant Fee">Merchant Fee</option>
+                            {synchronyPlans.map((plan) => (
+                              <option key={plan.value} value={plan.value}>
+                                {plan.label}
+                              </option>
+                            ))}
                           </>
                         )}
                       </select>
@@ -892,7 +1062,7 @@ const JobCalculator = () => {
                 </label>
                 {isEditing ? (
                   <div className="flex-1 flex items-center gap-2">
-                    <input
+                    {/* <input
                       type="text"
                       placeholder="Enter percentage"
                       value={formData[`${label.toLowerCase()}Percentage`] || ""}
@@ -903,7 +1073,7 @@ const JobCalculator = () => {
                         })
                       }
                       className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-1/3"
-                    />
+                    /> */}
                     <input
                       type="text"
                       placeholder="Enter amount"
@@ -919,9 +1089,9 @@ const JobCalculator = () => {
                   </div>
                 ) : (
                   <div className="flex-1 flex items-center gap-2">
-                    <span className="w-1/3 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
+                    {/* <span className="w-1/3 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
                       {formData[`${label.toLowerCase()}Percentage`] || "0%"}
-                    </span>
+                    </span> */}
                     <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
                       {formData[`${label.toLowerCase()}Amount`] || "$0.00"}
                     </span>
