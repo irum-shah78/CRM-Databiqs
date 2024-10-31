@@ -946,7 +946,7 @@ const JobCalculator = () => {
                   className="border border-gray-300 rounded-lg py-2 px-4 mt-1 flex-1"
                 />
               ) : (
-                <span className="border border-gray-300 rounded-lg py-2 px-4 mt-1 flex-1">
+                <span className="border border-gray-300 text-gray-700 rounded-lg py-2 px-4 mt-1 flex-1">
                   {formData[label.toLowerCase().replace(/\s+/g, "")] ||
                     "Enter Value"}
                 </span>
@@ -988,7 +988,7 @@ const JobCalculator = () => {
                         commissionPercentage: e.target.value,
                       })
                     }
-                    className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                    className="flex-1 border border-gray-300 text-gray-700 rounded-lg py-2 px-4 mt-1"
                   >
                     <option value="" disabled>
                       Select percentage
@@ -1013,11 +1013,11 @@ const JobCalculator = () => {
                           e.target.value,
                       })
                     }
-                    className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                    className="flex-1 border border-gray-300 text-gray-700 rounded-lg py-2 px-4 mt-1"
                   />
                 )
               ) : (
-                <span className="border border-gray-300 rounded-lg py-2 px-4 mt-1 flex-1">
+                <span className="border border-gray-300 text-gray-700 rounded-lg py-2 px-4 mt-1 flex-1">
                   {label === "Commission Percentage"
                     ? `${formData.commissionPercentage || "Select percentage"}%`
                     : formData[label.toLowerCase().replace(/\s+/g, "")] ||
