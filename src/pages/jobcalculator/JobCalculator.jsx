@@ -1062,18 +1062,6 @@ const JobCalculator = () => {
                 </label>
                 {isEditing ? (
                   <div className="flex-1 flex items-center gap-2">
-                    {/* <input
-                      type="text"
-                      placeholder="Enter percentage"
-                      value={formData[`${label.toLowerCase()}Percentage`] || ""}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          [`${label.toLowerCase()}Percentage`]: e.target.value,
-                        })
-                      }
-                      className="border border-gray-300 rounded-lg py-2 px-4 mt-1 w-1/3"
-                    /> */}
                     <input
                       type="text"
                       placeholder="Enter amount"
@@ -1089,9 +1077,6 @@ const JobCalculator = () => {
                   </div>
                 ) : (
                   <div className="flex-1 flex items-center gap-2">
-                    {/* <span className="w-1/3 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
-                      {formData[`${label.toLowerCase()}Percentage`] || "0%"}
-                    </span> */}
                     <span className="flex-1 py-2 px-4 border border-gray-300 rounded-lg mt-1 text-gray-700">
                       {formData[`${label.toLowerCase()}Amount`] || "$0.00"}
                     </span>

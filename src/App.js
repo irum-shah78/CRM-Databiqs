@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState } from "react";
 import Header from "./components/header/Header";
-import JobCalculator from "./pages/jobcalculator/JobCalculator";
+import JobCalculator from "./pages/jobcalculator/jobCalc.jsx";
 import {
   BrowserRouter as Router,
   Route,
@@ -57,6 +57,7 @@ function App() {
                 path="/dashboard"
                 element={<Dashboard currentUser={currentUser} />}
               />
+              {/* <Route path="/jobcalculator" element={<JobCalculator />} /> */}
               <Route path="/jobcalculator" element={<JobCalculator />} />
               <Route
                 path="/leadmanagement"
