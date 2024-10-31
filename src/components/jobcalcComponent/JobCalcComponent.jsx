@@ -73,112 +73,179 @@ const JobCalculator = () => {
 
   const constructionOptions = [
     { value: "cbs", label: "CBS" },
-    { value: "wood_frame", label: "Wood Frame" },
+    { value: "Wood Frame", label: "Wood Frame" },
   ];
   const [formData, setFormData] = useState({
     laborCost: 0,
-    materialCost: 0,
-    commissionJobAmount: 0,
-    commissionPercentage: 0,
-    shutters: 0,
-    miscellaneous: 0,
-    engineer: 0,
-    measurementsAndMisc: 0,
-    permit: 0,
-    scaffold: 0,
+    contracttotal: 0,
     numberOfSmokeDetectors: 0,
+    materialAmount: 0,
+    creditCardFeesAmount: 0,
+    commissionableAmount: 0,
+    profitPercentage: "0.00",
+    materialTax: 0,
+    materialcost: 0,
+    miscellaneous: 0,
+    shutterCost: 0,
+    totalCost: 0,
+    engineeringneeded: 0,
+    commissionamount: 0,
+    shutters: 0,
+    commissionpercentage: 0,
+    scaffold: 0,
+    jobProfit: 0,
+    profitAmount: 0,
+    commissionjobamount: 0,
+    caulkingAndScrews: 0,
     structureType: [],
-    luxuryCondoPrice: 0,
-    deliveryFee: 0,
-    woodFrameCost: 0,
+    constructionType: "",
+    subtotal: 0,
+    luxurycondoprice: 0,
+
+    engineer: 0,
+    measurementsandmisc: 0,
+    permit: 0,
+    deliveryfee: 0,
+    woodframecost: 0,
     finance_amount: 0,
     finance_percentage: 0,
-
-    materialTax: 0,
-    totalCost: 0,
     profit: 0,
-    profitPercentage: "0.00",
-    caulkingAndScrews: 0,
-    contractTotal: 0,
-    subTotal: 0,
+
     measurementsMisc: 0,
     typeOfStructure: 0,
-    constructionType: 0,
-
     customTerms: "",
     customTermsNotes: "",
     termsSelection: "",
-    constructionTypes: 0,
     municipality: "",
-    engineeringNeeded: 0,
     engineeringCost: 0,
     engineeringFees: "",
-    commissionableAmount: 0,
     creditCardFees: 0,
     creditCardAmount: 0,
-    materialAmount: 0,
-    shutterCost: 0,
-    commissionAmount: 0,
-    jobProfit: 0,
     financing: 0,
     termSelection: "",
     customPayment: "",
     paymentType: "",
     financingProvider: "",
     providerTerms: "",
-    creditCardFeesAmount: 0,
   });
 
-  const calculateLaborCost = () => {
-    return parseFloat(formData.laborCost || 0);
-  };
-
   const calculateMaterialTax = () => {
-    return Math.round(parseFloat(formData.materialCost || 0) * 0.07);
+    return Math.round(parseFloat(formData.materialcost || 0) * 0.07);
   };
 
   const calculateCommissionAmount = () => {
     return (
-      (parseFloat(formData.commissionPercentage || 0) / 100) *
-      parseFloat(formData.commissionJobAmount || 0)
+      (parseFloat(formData.commissionpercentage || 0) / 100) *
+      parseFloat(formData.commissionjobamount || 0)
     );
   };
 
-  const calculateTotalCost = () => {
-    const commissionAmount = calculateCommissionAmount();
-    const luxuryCondoAdjustment = formData.structureType.includes(
-      "Luxury Condo"
-    )
-      ? 0.5 * calculateLaborCost()
+  const calculateCaulkingAndScrews = () =>
+    parseFloat(formData.materialcost || 0) * 0.04;
+
+  const calculateContractTotal = () =>
+    Math.round(
+      parseFloat(formData.commissionjobamount || 0) + calculateMaterialTax()
+    );
+
+  const calculateSubTotal = () => {
+    return parseFloat(formData.subtotal || 0);
+  };
+
+  const calculateLaborCost = () => {
+    return calculateSubTotal();
+  };
+
+  const calculateLuxuryCondoPrice = () =>
+    formData.structureType.includes("Luxury Condo")
+      ? 0.5 * calculateSubTotal()
       : 0;
 
+  const calculateDeliveryFeeLuxuryCondo = () =>
+    formData.structureType.includes("Luxury Condo")
+      ? 0.1 * calculateSubTotal()
+      : 0;
+
+  const calculateWoodFrameCost = () =>
+    formData.constructionType === "Wood Frame" ? 0.1 * calculateSubTotal() : 0;
+
+  // const calculateTotalCost = () => {
+  //   const commissionAmount = calculateCommissionAmount();
+  //   const materialTax = calculateMaterialTax();
+  //   console.log("Material Tax:", materialTax);
+  //   console.log("Form Data:", formData);
+  //   const luxuryCondoAdjustment = formData.structureType.includes(
+  //     "Luxury Condo"
+  //   )
+  //     ? 0.5 * calculateLaborCost()
+  //     : 0;
+
+  //   return (
+  //     commissionAmount +
+  //     parseFloat(formData.shutters || 0) +
+  //     parseFloat(formData.miscellaneous || 0) +
+  //     calculateLaborCost() +
+  //     parseFloat(formData.materialcost || 0) +
+  //     parseFloat(formData.engineeringneeded || 0) +
+  //     parseFloat(formData.measurementsandmisc || 0) +
+  //     luxuryCondoAdjustment +
+  //     materialTax +
+  //     parseFloat(formData.materialcost || 0) * 0.04 +
+  //     parseFloat(formData.permit || 0) +
+  //     parseFloat(formData.scaffold || 0) +
+  //     (formData.numberOfSmokeDetectors
+  //       ? 50 * formData.numberOfSmokeDetectors
+  //       : 0)
+  //   );
+  // };
+
+  // const calculateProfits = () => {
+  //   const totalCost = calculateTotalCost();
+  //   return parseFloat(formData.commissionjobamount || 0) - totalCost;
+  // };
+
+  // const calculateProfitPercentage = () => {
+  //   const profits = calculateProfits();
+  //   return (
+  //     (profits / (parseFloat(formData.commissionjobamount || 0) || 1)) * 100
+  //   );
+  // };
+
+  const calculateTotalCost = () => {
+    const commissionAmount = calculateCommissionAmount();
+    const caulkingAndScrews = calculateCaulkingAndScrews();
+    // const materialTax = calculateMaterialTax();
+    const luxuryCondoPrice = calculateLuxuryCondoPrice();
+    const luxuryCondoFee = calculateDeliveryFeeLuxuryCondo();
+  
     return (
       commissionAmount +
       parseFloat(formData.shutters || 0) +
       parseFloat(formData.miscellaneous || 0) +
-      calculateLaborCost() +
-      parseFloat(formData.materialCost || 0) +
-      parseFloat(formData.engineer || 0) +
-      parseFloat(formData.measurementsAndMisc || 0) +
-      luxuryCondoAdjustment +
-      parseFloat(formData.materialCost || 0) * 0.04 +
+      calculateSubTotal() +
+      parseFloat(formData.materialcost || 0) +
+      parseFloat(formData.engineeringneeded || 0) +
+      parseFloat(formData.measurementsandmisc || 0) +
+      luxuryCondoPrice +
+      caulkingAndScrews +
       parseFloat(formData.permit || 0) +
-      parseFloat(formData.scaffold || 0) +
-      (formData.numberOfSmokeDetectors
-        ? 50 * formData.numberOfSmokeDetectors
-        : 0)
+      luxuryCondoFee
+      // parseFloat(formData.scaffold || 0) +
+      // (formData.numberOfSmokeDetectors
+      //   ? 50 * formData.numberOfSmokeDetectors
+      //   : 0)
     );
   };
-
+  
   const calculateProfits = () => {
     const totalCost = calculateTotalCost();
-    return parseFloat(formData.commissionJobAmount || 0) - totalCost;
+    return parseFloat(formData.commissionjobamount || 0) - totalCost;
   };
-
+  
   const calculateProfitPercentage = () => {
     const profits = calculateProfits();
     return (
-      (profits / (parseFloat(formData.commissionJobAmount || 0) || 1)) * 100
+      (profits / (parseFloat(formData.commissionjobamount || 0) || 1)) * 100
     );
   };
 
@@ -188,7 +255,7 @@ const JobCalculator = () => {
       paymentType: formData.paymentType,
       financingProvider: formData.financingProvider,
       providerTerms: formData.providerTerms,
-      contractTotal: formData.contractTotal,
+      contractTotal: formData.contracttotal,
       deposits: depositAmounts,
       percentages: paymentPercentages,
       paymentTypes: depositPaymentTypes,
@@ -383,25 +450,35 @@ const JobCalculator = () => {
     profit: null,
     profitPercentage: null,
     materialTax: null,
+    laborCost: null,
+    commissionAmount: null,
+    caulkingandScrews: null,
+    contractTotal: null,
+    luxuryCondoPrice: null,
+    deliveryFee: null,
+    woodFrameCost: null,
+    subTotal: null,
   });
 
   const handleCalculate = () => {
-    const totalCost = calculateTotalCost();
-    const profit = calculateProfits();
-    const profitPercentage = calculateProfitPercentage();
-    const materialTax = calculateMaterialTax();
+    const subTotal = calculateSubTotal();
+    const calculations = {
+      totalCost: calculateTotalCost(),
+      profit: calculateProfits(),
+      profitPercentage: calculateProfitPercentage(),
+      materialTax: calculateMaterialTax(),
+      caulkingandScrews: calculateCaulkingAndScrews(),
+      woodFrameCost: calculateWoodFrameCost(subTotal),
+      laborCost: calculateLaborCost(subTotal),
+      commissionAmount: calculateCommissionAmount(),
+      contractTotal: calculateContractTotal(),
+      luxuryCondoPrice: calculateLuxuryCondoPrice(subTotal),
+      deliveryFee: calculateDeliveryFeeLuxuryCondo(subTotal),
+    };
 
-    console.log("Total Cost:", totalCost);
-    console.log("Profit:", profit);
-    console.log("Profit Percentage:", profitPercentage);
-    console.log("Material Tax:", materialTax);
+    console.log("Calculations:", calculations);
 
-    setCalculatedValues({
-      totalCost,
-      profit,
-      profitPercentage,
-      materialTax,
-    });
+    setCalculatedValues({ ...calculations, subTotal });
   };
 
   return (
@@ -687,11 +764,11 @@ const JobCalculator = () => {
                     </label>
                     <input
                       type="number"
-                      value={formData.contractTotal || ""}
+                      value={formData.contracttotal || ""}
                       onChange={(e) =>
                         setFormData({
                           ...formData,
-                          contractTotal: e.target.value,
+                          contracttotal: e.target.value,
                         })
                       }
                       className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
@@ -699,7 +776,7 @@ const JobCalculator = () => {
                   </>
                 )}
 
-                {formData.contractTotal && (
+                {formData.contracttotal && (
                   <>
                     <div className="bg-gray-100 p-4 rounded-lg shadow-md mt-4">
                       {Array.from({ length: formData.customPayment }).map(
@@ -773,7 +850,7 @@ const JobCalculator = () => {
                               className="flex-1 border border-gray-300 rounded-lg py-2 px-4 mt-1"
                               onBlur={() => {
                                 const total =
-                                  parseFloat(formData.contractTotal) || 0;
+                                  parseFloat(formData.contracttotal) || 0;
                                 const percentage =
                                   parseFloat(paymentPercentages[index]) || 0;
                                 const deposit = (total * percentage) / 100;
@@ -968,6 +1045,9 @@ const JobCalculator = () => {
             "Profit Amount",
             "Commission Job Amount",
             "Caulking and Screws",
+            "Sub Total",
+            "Measurements And Misc",
+            "Permit",
           ].map((label, idx) => (
             <div
               key={idx}
@@ -981,11 +1061,11 @@ const JobCalculator = () => {
                 label === "Commission Percentage" ? (
                   <select
                     name="commissionPercentage"
-                    value={formData.commissionPercentage || ""}
+                    value={formData.commissionpercentage || ""}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        commissionPercentage: e.target.value,
+                        commissionpercentage: e.target.value,
                       })
                     }
                     className="flex-1 border border-gray-300 text-gray-700 rounded-lg py-2 px-4 mt-1"
@@ -1019,7 +1099,7 @@ const JobCalculator = () => {
               ) : (
                 <span className="border border-gray-300 text-gray-700 rounded-lg py-2 px-4 mt-1 flex-1">
                   {label === "Commission Percentage"
-                    ? `${formData.commissionPercentage || "Select percentage"}%`
+                    ? `${formData.commissionpercentage || "Select percentage"}%`
                     : formData[label.toLowerCase().replace(/\s+/g, "")] ||
                       "Enter Value"}
                 </span>
@@ -1031,20 +1111,32 @@ const JobCalculator = () => {
             <label className="text-sm text-gray-700 capitalize font-semibold">
               Type of Structures
             </label>
-            <Select
-              isMulti
-              options={structureOptions}
-              value={structureOptions.filter((option) =>
-                formData.structureType.includes(option.value)
-              )}
-              onChange={(selectedOptions) =>
-                setFormData({
-                  ...formData,
-                  structureType: selectedOptions.map((option) => option.value),
-                })
-              }
-              className="border border-gray-300 rounded-lg"
-            />
+
+            {isEditing ? (
+              <Select
+                isMulti
+                options={structureOptions}
+                value={structureOptions.filter((option) =>
+                  formData.structureType.includes(option.value)
+                )}
+                onChange={(selectedOptions) => {
+                  setFormData({
+                    ...formData,
+                    structureType: selectedOptions.map(
+                      (option) => option.value
+                    ),
+                  });
+                  handleCalculate();
+                }}
+                className="border border-gray-300 rounded-lg"
+              />
+            ) : (
+              <div className="border border-gray-300 rounded-lg py-2 px-4 mt-1 text-gray-700">
+                {formData.structureType.length > 0
+                  ? formData.structureType.join(", ")
+                  : "Select structure type"}
+              </div>
+            )}
           </div>
 
           {formData.structureType.includes("Luxury Condo") && (
@@ -1055,31 +1147,22 @@ const JobCalculator = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="Enter Luxury Condo Price"
-                  value={formData.luxuryCondoPrice}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      luxuryCondoPrice: e.target.value,
-                    })
-                  }
+                  placeholder="Calculated Luxury Condo Price"
+                  value={formData.luxurycondoprice || ""}
+                  readOnly
                   className="border border-gray-300 rounded-lg py-2 px-4 mt-1"
                 />
               </div>
+
               <div className="flex flex-col gap-2">
                 <label className="text-sm text-gray-700 capitalize font-semibold">
                   Delivery Fee
                 </label>
                 <input
                   type="text"
-                  placeholder="Enter Delivery Fee"
-                  value={formData.deliveryFee}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      deliveryFee: e.target.value,
-                    })
-                  }
+                  placeholder="Calculated Delivery Fee"
+                  value={formData.deliveryfee || ""}
+                  readOnly
                   className="border border-gray-300 rounded-lg py-2 px-4 mt-1"
                 />
               </div>
@@ -1090,37 +1173,52 @@ const JobCalculator = () => {
             <label className="text-sm text-gray-700 capitalize font-semibold">
               Construction Type
             </label>
-            <Select
-              options={constructionOptions}
-              value={
-                constructionOptions.find(
-                  (option) => option.value === formData.constructionType
-                ) || null
-              }
-              onChange={(selectedOption) =>
-                setFormData({
-                  ...formData,
-                  constructionType: selectedOption ? selectedOption.value : "",
-                })
-              }
-              className="border border-gray-300 rounded-lg"
-            />
+
+            {isEditing ? (
+              <Select
+                options={constructionOptions}
+                value={
+                  constructionOptions.find(
+                    (option) => option.value === formData.constructionType
+                  ) || null
+                }
+                onChange={(selectedOption) => {
+                  setFormData({
+                    ...formData,
+                    constructionType: selectedOption
+                      ? selectedOption.value
+                      : "",
+                  });
+                  handleCalculate();
+                }}
+                className="border border-gray-300 rounded-lg"
+              />
+            ) : (
+              <div className="border border-gray-300 rounded-lg py-2 px-4 mt-1 text-gray-700">
+                {formData.constructionType || "Select Construction Type"}
+              </div>
+            )}
           </div>
 
-          {formData.constructionType === "wood_frame" && (
+          {formData.constructionType === "Wood Frame" && (
             <div className="flex flex-col gap-2 w-full mt-4">
               <label className="text-sm text-gray-700 capitalize font-semibold">
                 Wood Frame Cost
               </label>
-              <input
-                type="text"
-                placeholder="Enter Wood Frame Cost"
-                value={formData.woodFrameCost}
-                onChange={(e) =>
-                  setFormData({ ...formData, woodFrameCost: e.target.value })
-                }
-                className="border border-gray-300 rounded-lg py-2 px-4 mt-1"
-              />
+
+              {isEditing ? (
+                <input
+                  type="text"
+                  placeholder="Calculated Wood Frame Cost"
+                  value={formData.woodframecost || ""}
+                  readOnly
+                  className="border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                />
+              ) : (
+                <span className="border border-gray-300 rounded-lg py-2 px-4 mt-1 text-gray-700">
+                  {formData.woodframecost || "Calculated Wood Frame Cost"}
+                </span>
+              )}
             </div>
           )}
         </div>
@@ -1269,6 +1367,13 @@ const JobCalculator = () => {
           <p>Profit: ${calculatedValues.profit}</p>
           <p>Profit Percentage: {calculatedValues.profitPercentage}%</p>
           <p>Material Tax: ${calculatedValues.materialTax}</p>
+          <p>Contract Total: ${calculatedValues.contractTotal}</p>
+          <p>Caulking and Screws: ${calculatedValues.caulkingandScrews}</p>
+          <p>Labor Cost: ${calculatedValues.laborCost}</p>
+          <p>Wood Frame Cost: ${calculatedValues.woodFrameCost}</p>
+          <p>Delivery Fee: ${calculatedValues.deliveryFee}</p>
+          <p>Luxury Condo Price: ${calculatedValues.luxuryCondoPrice}</p>
+          <p>Commission Amount: ${calculatedValues.commissionAmount}</p>
         </div>
       </div>
     </div>
