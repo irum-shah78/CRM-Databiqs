@@ -69,6 +69,8 @@ const JobCalculator = () => {
     { value: "Town Home", label: "Town Home" },
     { value: "Condo Century Value Type", label: "Condo Century Value Type" },
     { value: "Luxury Condo", label: "Luxury Condo" },
+    { value: "New Contruction", label: "New Construction" },
+    { value: "Commercial", label: "Commercial" },
   ];
 
   const constructionOptions = [
@@ -97,7 +99,7 @@ const JobCalculator = () => {
     profitAmount: 0,
     commissionjobamount: 0,
     caulkingAndScrews: 0,
-    structureType: [],
+    structureType: "",
     constructionType: "",
     subtotal: 0,
     luxurycondoprice: 0,
@@ -110,6 +112,8 @@ const JobCalculator = () => {
     finance_amount: 0,
     finance_percentage: 0,
     profit: 0,
+    additionalstructurecost: 0,
+    constructiontypecost: 0,
 
     measurementsMisc: 0,
     typeOfStructure: 0,
@@ -217,7 +221,7 @@ const JobCalculator = () => {
     // const materialTax = calculateMaterialTax();
     const luxuryCondoPrice = calculateLuxuryCondoPrice();
     const luxuryCondoFee = calculateDeliveryFeeLuxuryCondo();
-  
+
     return (
       commissionAmount +
       parseFloat(formData.shutters || 0) +
@@ -236,12 +240,12 @@ const JobCalculator = () => {
       //   : 0)
     );
   };
-  
+
   const calculateProfits = () => {
     const totalCost = calculateTotalCost();
     return parseFloat(formData.commissionjobamount || 0) - totalCost;
   };
-  
+
   const calculateProfitPercentage = () => {
     const profits = calculateProfits();
     return (
@@ -989,14 +993,14 @@ const JobCalculator = () => {
       <div className="bg-white overflow-x-auto shadow-md rounded-lg p-4 mt-4">
         <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-4 mt-3 p-4">
           {[
-            "Labor Cost",
+            "Miscellaneous",
             "Contract Total",
             "No of Smoke Detectors",
-            "Material Amount",
-            "Credit Card Fees Amount",
             "Commissionable Amount",
-            "Profit Percentage",
+            "Credit Card Fees Amount",
             "Material Tax",
+            "Permit",
+            "Material Amount",
             "Material Cost",
           ].map((label, idx) => (
             <div
@@ -1032,22 +1036,15 @@ const JobCalculator = () => {
           ))}
 
           {[
-            "Miscellaneous",
+            "Labor Cost",
             "Shutter Cost",
-            "Total Cost",
-            "Engineering Needed",
-            "Commission Amount",
-            "Shutters",
             "Commission Percentage",
-            "Scaffold",
-            "Profit Percentage",
-            "Job Profit",
+            "Total Cost",
+            "Commission Amount",
+            "Engineering Needed",
             "Profit Amount",
-            "Commission Job Amount",
-            "Caulking and Screws",
-            "Sub Total",
-            "Measurements And Misc",
-            "Permit",
+            "Shutters",
+            "Profit Percentage",
           ].map((label, idx) => (
             <div
               key={idx}
@@ -1107,172 +1104,283 @@ const JobCalculator = () => {
             </div>
           ))}
 
-          <div className="flex flex-col gap-2 w-full">
-            <label className="text-sm text-gray-700 capitalize font-semibold">
-              Type of Structures
-            </label>
+          <div className="grid grid-cols-1 gap-4">
+            {[
+              "Scaffold",
+              "Job Profit",
+              "Commission Job Amount",
+              "Caulking and Screws",
+              "Sub Total",
+              "Measurements And Misc",
+            ].map((label, idx) => (
+              <div
+                key={idx}
+                className="flex lg:flex-row md:flex-row flex-col lg:items-center md:items-center gap-2 mt-2"
+              >
+                <label className="w-44 text-sm text-gray-700 capitalize font-semibold">
+                  {label}
+                </label>
 
-            {isEditing ? (
-              <Select
-                isMulti
-                options={structureOptions}
-                value={structureOptions.filter((option) =>
-                  formData.structureType.includes(option.value)
+                {isEditing ? (
+                  label === "Commission Percentage" ? (
+                    <select
+                      name="commissionPercentage"
+                      value={formData.commissionpercentage || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          commissionpercentage: e.target.value,
+                        })
+                      }
+                      className="flex-1 border border-gray-300 text-gray-700 rounded-lg py-2 px-4 mt-1"
+                    >
+                      <option value="" disabled>
+                        Select percentage
+                      </option>
+                      {Array.from({ length: 10 }, (_, i) => (
+                        <option key={10 - i} value={10 - i}>
+                          {10 - i}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      type="text"
+                      placeholder="Enter value"
+                      value={
+                        formData[label.toLowerCase().replace(/\s+/g, "")] || ""
+                      }
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          [label.toLowerCase().replace(/\s+/g, "")]:
+                            e.target.value,
+                        })
+                      }
+                      className="flex-1 border border-gray-300 text-gray-700 rounded-lg py-2 px-4 mt-1"
+                    />
+                  )
+                ) : (
+                  <span className="border border-gray-300 text-gray-700 rounded-lg py-2 px-4 mt-1 flex-1">
+                    {label === "Commission Percentage"
+                      ? `${
+                          formData.commissionpercentage || "Select percentage"
+                        }%`
+                      : formData[label.toLowerCase().replace(/\s+/g, "")] ||
+                        "Enter Value"}
+                  </span>
                 )}
-                onChange={(selectedOptions) => {
-                  setFormData({
-                    ...formData,
-                    structureType: selectedOptions.map(
-                      (option) => option.value
-                    ),
-                  });
-                  handleCalculate();
-                }}
-                className="border border-gray-300 rounded-lg"
-              />
-            ) : (
-              <div className="border border-gray-300 rounded-lg py-2 px-4 mt-1 text-gray-700">
-                {formData.structureType.length > 0
-                  ? formData.structureType.join(", ")
-                  : "Select structure type"}
               </div>
-            )}
-          </div>
+            ))}
 
-          {formData.structureType.includes("Luxury Condo") && (
-            <div className="flex flex-col gap-2 w-full mt-4">
-              <div className="flex flex-col gap-2">
-                <label className="text-sm text-gray-700 capitalize font-semibold">
-                  Luxury Condo Price
-                </label>
-                <input
-                  type="text"
-                  placeholder="Calculated Luxury Condo Price"
-                  value={formData.luxurycondoprice || ""}
-                  readOnly
-                  className="border border-gray-300 rounded-lg py-2 px-4 mt-1"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-sm text-gray-700 capitalize font-semibold">
-                  Delivery Fee
-                </label>
-                <input
-                  type="text"
-                  placeholder="Calculated Delivery Fee"
-                  value={formData.deliveryfee || ""}
-                  readOnly
-                  className="border border-gray-300 rounded-lg py-2 px-4 mt-1"
-                />
-              </div>
-            </div>
-          )}
-
-          <div className="flex flex-col gap-2 w-full">
-            <label className="text-sm text-gray-700 capitalize font-semibold">
-              Construction Type
-            </label>
-
-            {isEditing ? (
-              <Select
-                options={constructionOptions}
-                value={
-                  constructionOptions.find(
-                    (option) => option.value === formData.constructionType
-                  ) || null
-                }
-                onChange={(selectedOption) => {
-                  setFormData({
-                    ...formData,
-                    constructionType: selectedOption
-                      ? selectedOption.value
-                      : "",
-                  });
-                  handleCalculate();
-                }}
-                className="border border-gray-300 rounded-lg"
-              />
-            ) : (
-              <div className="border border-gray-300 rounded-lg py-2 px-4 mt-1 text-gray-700">
-                {formData.constructionType || "Select Construction Type"}
-              </div>
-            )}
-          </div>
-
-          {formData.constructionType === "Wood Frame" && (
-            <div className="flex flex-col gap-2 w-full mt-4">
+            <div className="flex flex-col gap-2 w-full">
               <label className="text-sm text-gray-700 capitalize font-semibold">
-                Wood Frame Cost
+                Type of Structures
               </label>
 
               {isEditing ? (
-                <input
-                  type="text"
-                  placeholder="Calculated Wood Frame Cost"
-                  value={formData.woodframecost || ""}
-                  readOnly
-                  className="border border-gray-300 rounded-lg py-2 px-4 mt-1"
-                />
-              ) : (
-                <span className="border border-gray-300 rounded-lg py-2 px-4 mt-1 text-gray-700">
-                  {formData.woodframecost || "Calculated Wood Frame Cost"}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-
-        <div className="flex flex-col lg:flex-row items-start lg:items-center mt-2">
-          <label className="w-44 ms-5 text-sm font-semibold text-gray-700 capitalize">
-            Finance
-          </label>
-
-          <div className="flex flex-col md:flex-row w-full gap-4">
-            <div className="flex-1">
-              {isEditing ? (
-                <input
-                  type="text"
-                  placeholder="Amount"
-                  value={formData["finance_amount"] || ""}
-                  onChange={(e) =>
+                <Select
+                  options={structureOptions}
+                  value={structureOptions.find(
+                    (option) => option.value === formData.structureType
+                  )}
+                  onChange={(selectedOption) => {
                     setFormData({
                       ...formData,
-                      finance_amount: e.target.value,
-                    })
-                  }
-                  className="border border-gray-300 rounded-lg py-2 px-4 w-full mt-1 placeholder-gray-400"
+                      structureType: selectedOption ? selectedOption.value : "",
+                    });
+                    handleCalculate();
+                  }}
+                  className="border border-gray-300 rounded-lg"
                 />
               ) : (
-                <span className="block border border-gray-300 rounded-lg py-2 px-4 w-full mt-1 text-gray-700">
-                  {formData["finance_amount"]
-                    ? `$${parseFloat(formData["finance_amount"]).toFixed(2)}`
-                    : "$0.00"}
-                </span>
+                <div className="border border-gray-300 rounded-lg py-2 px-4 mt-1 text-gray-700">
+                  {formData.structureType
+                    ? formData.structureType
+                    : "Select structure type"}
+                </div>
               )}
             </div>
 
-            <div className="flex-1">
+            {formData.structureType === "Luxury Condo" && (
+              <div className="flex flex-col gap-2 w-full mt-4">
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm text-gray-700 capitalize font-semibold">
+                    Luxury Condo Price
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Calculated Luxury Condo Price"
+                    value={formData.luxurycondoprice || ""}
+                    readOnly
+                    className="border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm text-gray-700 capitalize font-semibold">
+                    Delivery Fee
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Calculated Delivery Fee"
+                    value={formData.deliveryfee || ""}
+                    readOnly
+                    className="border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-700 capitalize font-semibold">
+                Additional Structure Costs
+              </label>
+              <input
+                type="text"
+                placeholder="Enter additional structure cost"
+                value={formData.additionalstructurecost || ""}
+                readOnly={!isEditing}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    additionalstructurecost: e.target.value,
+                  })
+                }
+                className={`border border-gray-300 rounded-lg py-2 px-4 mt-1 ${
+                  isEditing ? "" : " text-gray-500"
+                }`}
+              />
+            </div>
+
+            <div className="flex flex-col gap-2 w-full">
+              <label className="text-sm text-gray-700 capitalize font-semibold">
+                Construction Type
+              </label>
+
               {isEditing ? (
-                <input
-                  type="text"
-                  placeholder="Percentage"
-                  value={formData["finance_percentage"] || ""}
-                  onChange={(e) =>
+                <Select
+                  options={constructionOptions}
+                  value={
+                    constructionOptions.find(
+                      (option) => option.value === formData.constructionType
+                    ) || null
+                  }
+                  onChange={(selectedOption) => {
                     setFormData({
                       ...formData,
-                      finance_percentage: e.target.value,
-                    })
-                  }
-                  className="border border-gray-300 rounded-lg py-2 px-4 w-full mt-1 placeholder-gray-400"
+                      constructionType: selectedOption
+                        ? selectedOption.value
+                        : "",
+                    });
+                    handleCalculate();
+                  }}
+                  className="border border-gray-300 rounded-lg"
                 />
               ) : (
-                <span className="block border border-gray-300 rounded-lg py-2 px-4 w-full mt-1 text-gray-700">
-                  {formData["finance_percentage"]
-                    ? `${formData["finance_percentage"]}%`
-                    : "0%"}
-                </span>
+                <div className="border border-gray-300 rounded-lg py-2 px-4 mt-1 text-gray-700">
+                  {formData.constructionType || "Select Construction Type"}
+                </div>
               )}
+            </div>
+
+            {formData.constructionType === "Wood Frame" && (
+              <div className="flex flex-col gap-2 w-full mt-4">
+                <label className="text-sm text-gray-700 capitalize font-semibold">
+                  Wood Frame Cost
+                </label>
+
+                {isEditing ? (
+                  <input
+                    type="text"
+                    placeholder="Calculated Wood Frame Cost"
+                    value={formData.woodframecost || ""}
+                    readOnly
+                    className="border border-gray-300 rounded-lg py-2 px-4 mt-1"
+                  />
+                ) : (
+                  <span className="border border-gray-300 rounded-lg py-2 px-4 mt-1 text-gray-700">
+                    {formData.woodframecost || "Calculated Wood Frame Cost"}
+                  </span>
+                )}
+              </div>
+            )}
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-700 capitalize font-semibold">
+                Construction Type Costs
+              </label>
+              <input
+                type="text"
+                placeholder="Enter construction type cost"
+                value={formData.constructiontypecost || ""}
+                readOnly={!isEditing}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    constructiontypecost: e.target.value,
+                  })
+                }
+                className={`border border-gray-300 rounded-lg py-2 px-4 mt-1 ${
+                  isEditing ? "" : " text-gray-500"
+                }`}
+              />
+            </div>
+
+            <div className="flex flex-col lg:flex-row items-start lg:items-center mt-2">
+              <label className="w-44 text-sm font-semibold text-gray-700 capitalize">
+                Finance
+              </label>
+
+              <div className="flex flex-col md:flex-row w-full gap-4">
+                <div className="flex-1">
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      placeholder="Amount"
+                      value={formData["finance_amount"] || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          finance_amount: e.target.value,
+                        })
+                      }
+                      className="border border-gray-300 rounded-lg py-2 px-4 w-full mt-1 placeholder-gray-400"
+                    />
+                  ) : (
+                    <span className="block border border-gray-300 rounded-lg py-2 px-4 w-full mt-1 text-gray-700">
+                      {formData["finance_amount"]
+                        ? `$${parseFloat(formData["finance_amount"]).toFixed(
+                            2
+                          )}`
+                        : "$0.00"}
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex-1">
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      placeholder="Percentage"
+                      value={formData["finance_percentage"] || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          finance_percentage: e.target.value,
+                        })
+                      }
+                      className="border border-gray-300 rounded-lg py-2 px-4 w-full mt-1 placeholder-gray-400"
+                    />
+                  ) : (
+                    <span className="block border border-gray-300 rounded-lg py-2 px-4 w-full mt-1 text-gray-700">
+                      {formData["finance_percentage"]
+                        ? `${formData["finance_percentage"]}%`
+                        : "0%"}
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
