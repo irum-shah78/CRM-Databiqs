@@ -80,7 +80,7 @@ const JobCalculator = () => {
   const [formData, setFormData] = useState({
     laborCost: 0,
     contracttotal: 0,
-    numberOfSmokeDetectors: 0,
+    numberofsmokedetectors: 0,
     materialAmount: 0,
     creditCardFeesAmount: 0,
     commissionableAmount: 0,
